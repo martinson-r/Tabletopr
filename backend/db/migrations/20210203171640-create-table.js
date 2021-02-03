@@ -24,13 +24,11 @@ module.exports = {
       city: {
         type: Sequelize.STRING
       },
-      stateId: {
-        type: Sequelize.INTEGER,
-        references: { model: "States", key: "id" },
+      state: {
+        type: Sequelize.STRING,
       },
-      countryId: {
-        type: Sequelize.INTEGER,
-        references: { model: "Countries", key: "id" },
+      country: {
+        type: Sequelize.STRING,
       },
       zipcode: {
         type: Sequelize.STRING

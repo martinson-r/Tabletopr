@@ -19,6 +19,12 @@ module.exports = {
     },
     {
       gameType: 'Roll20',
+    },
+    {
+      gameType: 'Ventrilo',
+    },
+    {
+      gameType: 'VOIP (other)',
     }], {});
   },
 
