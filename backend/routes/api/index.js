@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
+const tablesRouter = require('./tables.js');
 
 // GET /api/set-token-cookie
 const asyncHandler = require('express-async-handler');
@@ -21,6 +22,7 @@ router.get(
 
 // GET /api/restore-user
 const { restoreUser } = require('../../utils/auth.js');
+const { route } = require('./session.js');
 router.get('/restore-user', restoreUser, (req, res) => {
   return res.json(req.user);
 });
@@ -42,5 +44,7 @@ router.post('/test', function (req, res) {
 router.use('/session', sessionRouter);
 
 router.use('/users', usersRouter);
+
+router.use('/tables', tablesRouter);
 
 module.exports = router;

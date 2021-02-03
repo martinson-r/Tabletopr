@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     language: DataTypes.STRING
   }, {});
   Language.associate = function(models) {
-    // associations can be defined here
+    Language.hasMany(models.Table, { foreignKey: "languageId", })
   };
   return Language;
 };

@@ -4,7 +4,8 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Tables', [{
       tableName: 'Tales of Fantastic Adventure',
-      hostId: 6,
+      description: 'Unravel mysteries and uncover your fate.',
+      hostId: 5,
       isVirtual: true,
       gameTypeId: 1,
       gameSystemId: 1,
@@ -15,6 +16,7 @@ module.exports = {
     },
     {
       tableName: 'Test Title',
+      description: 'This is a test.',
       hostId: 1,
       isVirtual: false,
       address: '321 128th st SE',

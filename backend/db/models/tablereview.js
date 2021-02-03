@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
     tableId: DataTypes.INTEGER
   }, {});
   TableReview.associate = function(models) {
-    // associations can be defined here
+    TableReview.belongsTo(models.Table, { foreignKey: "tableId", });
+    TableReview.belongsTo(models.User, { foreignKey: "userId", });
   };
   return TableReview;
 };
