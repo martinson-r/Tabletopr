@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 export const LOAD_TABLES = './locations/LOAD_TABLES';
 export const LOAD_SINGLE_TABLE = './locations/LOAD_SINGLE_TABLE';
 
@@ -21,12 +23,27 @@ const loadAllTables = (tableList) => ({
   };
 
   export const getSingleTable = (id) => async (dispatch) => {
-    console.log('ID IN THUNK', id)
     const response = await fetch(`/api/tables/${id}`);
     if (response.ok) {
       const table = await response.json();
       dispatch(loadSingleTable(table));
-      console.log('LOADED TABLE', table)
+    }
+  };
+
+  export const searchTables = (payload) => async (dispatch) => {
+    const { query } = payload;
+    const response = await fetch(`/api/tables/search`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "XSRF-Token": `${Cookies.get('XSRF-TOKEN')}` },
+      body: JSON.stringify({
+        query
+      })
+    });
+    console.log('TOKEN', Cookies.get('XSRF-TOKEN'))
+    if (response.ok) {
+      const tableResults = await response.json();
+      console.log('Search Results:   ', tableResults)
+      dispatch(loadAllTables(tableResults));
     }
   };
 

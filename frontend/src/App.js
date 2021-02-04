@@ -8,6 +8,8 @@ import TableDetail from "./components/TableDetail";
 // import LoginFormPage from "./components/LoginFormPage";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
+import SimpleSearch from "./components/SimpleSearch";
+import SearchResults from "./components/SearchResults";
 
 function App() {
   const dispatch = useDispatch();
@@ -18,13 +20,16 @@ function App() {
 
   return (
     <>
-
-      <Navigation isLoaded={isLoaded} />
       <h1><NavLink exact to="/">Tabletopr</NavLink></h1>
+      <Navigation isLoaded={isLoaded} />
+      <SimpleSearch />
       {isLoaded && (
         <Switch>
           <Route path="/tables/:tableId" exact={true}>
             <TableDetail />
+          </Route>
+          <Route path="/results">
+            <SearchResults />
           </Route>
           <Route path="/login" >
             <LoginFormPage />
@@ -35,7 +40,6 @@ function App() {
           <Route path="/" exact={true}>
             <Home />
           </Route>
-
         </Switch>
       )}
     </>

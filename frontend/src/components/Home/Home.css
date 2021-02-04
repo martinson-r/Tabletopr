@@ -5,8 +5,9 @@
 }
 
 .table-card {
-    background-color:gray;
-    padding:10px;
+    background-color:#d5d5d5;
+    padding: 10px;
     border-radius: 8px;
-    width: 20%;
+    width: 200px;
+    height: 200px;
 }

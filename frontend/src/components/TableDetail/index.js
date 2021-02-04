@@ -44,7 +44,8 @@ function TableDetail() {
         Otherwise, the 'true' one is displayed */}
         <p>Open spots: {openSpots}</p>
         <h3>Reviews:</h3>
-        {table.TableReviews.map(review => (<div><p><b>{review.User.username}:</b></p><p>{review.content}</p></div>))}
+        {table.TableReviews.length && (table.TableReviews.map(review => (<div><p><b>{review.User.username}:</b></p><p>{review.content}</p></div>)))}
+        {!table.TableReviews.length && (<p>There are no reviews for this table, yet.</p>)}
         </>
     )
 }
