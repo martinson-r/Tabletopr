@@ -8,26 +8,36 @@ function TableDetail() {
     const { tableId } = useParams();
     const dispatch = useDispatch();
     const table = useSelector(state => state.tables.table);
-    console.log('TABLE', table)
+    const sessionUser = useSelector((state) => state.session.user);
     const openSpots = table.maxPlayers - table.numPlayers;
-    const [applicationStatus, setApplicationStatus] = "";
+    const [applicationStatus, setApplicationStatus] = useState([false, ""]);
 
     useEffect(() => {
         dispatch(getSingleTable(tableId));
-      }, [dispatch]);
+}, [dispatch]);
+
+useEffect(() => {
+    if (table.Applications) {
+        if (table.Applications.length) {
+            const matchingApp = table.Applications.filter(application => application.userId === sessionUser.id);
+            if (matchingApp) {
+                console.log('matchingApp', matchingApp)
+                if (matchingApp[0].denied) {
+                    setApplicationStatus([true, "Your application has been denied."])
+                } else if (matchingApp[0].approved) {
+                    setApplicationStatus([true, "Your application has been approved"])
+                } else {
+                    console.log('neither true nor false');
+                    setApplicationStatus([true, "Your application is still being reviewed."])
+                }
+            }
+        }
+    }
+
+}, [table.Applications])
 
       if (!table.tableName) {
           return null;
-      }
-
-      if (table.Applications.length) {
-          if (!table.Applications.approved&&!table.Application.denied) {
-              setApplicationStatus("Your application is still pending");
-          } else if (table.Applications.approved) {
-              setApplicationStatus("Your application has been approved. Congratulations!");
-          } else {
-              setApplicationStatus("Your application has been denied.");
-          }
       }
 
     return (
@@ -38,14 +48,12 @@ function TableDetail() {
         <h2>Game Description:</h2>
         <p>{table.description}</p>
         <p>Language: {table.Language.language}</p>
-        {applicationStatus && (<p><i>{applicationStatus}</i></p>)}
-        {!applicationStatus && (<button>Apply to this game</button>)}
-        {/* If application status is not true in either slot, it's pending approval
-        Otherwise, the 'true' one is displayed */}
+        {(applicationStatus[0]) && (<p><i>{applicationStatus[1]}</i></p>)}
+        {(!applicationStatus[0]) && (<Link to={`/tables/${tableId}/apply`}>Apply to this game</Link>)}
         <p>Open spots: {openSpots}</p>
         <h3>Reviews:</h3>
-        {table.TableReviews.length && (table.TableReviews.map(review => (<div><p><b>{review.User.username}:</b></p><p>{review.content}</p></div>)))}
         {!table.TableReviews.length && (<p>There are no reviews for this table, yet.</p>)}
+        {table.TableReviews && (table.TableReviews.map(review => (<div><p><b>{review.User.username}:</b></p><p>{review.content}</p></div>)))}
         </>
     )
 }

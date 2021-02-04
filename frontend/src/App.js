@@ -10,6 +10,7 @@ import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import SimpleSearch from "./components/SimpleSearch";
 import SearchResults from "./components/SearchResults";
+import GameApplicationForm from "./components/GameApplicationForm";
 
 function App() {
   const dispatch = useDispatch();
@@ -30,6 +31,9 @@ function App() {
           </Route>
           <Route path="/results">
             <SearchResults />
+          </Route>
+          <Route path="/tables/:tableId/apply">
+            <GameApplicationForm />
           </Route>
           <Route path="/login" >
             <LoginFormPage />

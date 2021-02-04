@@ -47,6 +47,30 @@ const loadAllTables = (tableList) => ({
     }
   };
 
+  export const applyToTable = (payload) => async (dispatch) => {
+    const { playStyle,
+      characterConcept,
+      whyJoin,
+      experience,
+      tableId } = payload;
+    const response = await fetch(`/api/tables/${tableId}/apply`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "XSRF-Token": `${Cookies.get('XSRF-TOKEN')}` },
+      body: JSON.stringify({
+        playStyle,
+        characterConcept,
+        whyJoin,
+        experience,
+        tableId
+      })
+    });
+    if (response.ok) {
+      const updatedTable = await response.json();
+      dispatch(loadSingleTable(updatedTable));
+    }
+  };
+
+
   const initialState = {
     tableList: [],
     table: {}

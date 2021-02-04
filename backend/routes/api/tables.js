@@ -22,6 +22,7 @@ router.get('/', asyncHandler(async (req, res) => {
     const { user } = req;
     if (user !== undefined) {
         const userId = user.id;
+        console.log('USERID', userId)
         const fetchSingleTable = await Table.findOne({
             where: {id},
             include: [GameSystem, GameType, User, Language, { model: TableReview, include: User }, { model: Application, required: false, where: {
@@ -86,6 +87,38 @@ router.get('/', asyncHandler(async (req, res) => {
             return res.json(createTable);
         }
         return res.json('Must be logged in to create table')
+     }));
+
+     router.post('/:tableId/apply/', restoreUser, asyncHandler(async (req, res) => {
+        const tableId = req.params.tableId;
+        const { user } = req;
+        const { playStyle, characterConcept, whyJoin, experience } = req.body;
+        if (user !== undefined) {
+            const userId = user.id;
+            const createApplication = await Application.create({
+                userId,
+                tableId,
+                playStyle,
+                characterConcept,
+                whyJoin,
+                experience,
+                approved: false,
+                denied: false
+            });
+
+            await createApplication.save();
+
+            const updatedTable = await Table.findOne({
+                where: { id: tableId },
+                include: [GameSystem, GameType, User, Language, { model: TableReview, include: User }, { model: Application, required: false, where: {
+                    userId: userId
+                  }} ]
+            })
+
+            console.log('UPDATED TABLE*****', updatedTable)
+            return res.json(updatedTable);
+        }
+        return res.json('Must be logged in to apply to a table')
      }));
 
 
