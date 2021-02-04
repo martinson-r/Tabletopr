@@ -71,6 +71,28 @@ const loadAllTables = (tableList) => ({
   };
 
 
+  export const submitTable = (payload) => async (dispatch) => {
+    const { tableName, description, isVirtual, gameTypeId, gameSystemId, languageId, maxPlayers } = payload;
+    const response = await fetch(`/api/tables`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "XSRF-Token": `${Cookies.get('XSRF-TOKEN')}` },
+      body: JSON.stringify({
+        tableName,
+        description,
+        isVirtual,
+        gameTypeId,
+        gameSystemId,
+        languageId,
+        maxPlayers
+      })
+    });
+    if (response.ok) {
+      const updatedTable = await response.json();
+      dispatch(loadSingleTable(updatedTable));
+    }
+  };
+
+
   const initialState = {
     tableList: [],
     table: {}

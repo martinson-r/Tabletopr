@@ -11,6 +11,7 @@ import Navigation from "./components/Navigation";
 import SimpleSearch from "./components/SimpleSearch";
 import SearchResults from "./components/SearchResults";
 import GameApplicationForm from "./components/GameApplicationForm";
+import GameSubmissionForm from "./components/GameSubmissionForm";
 
 function App() {
   const dispatch = useDispatch();
@@ -26,6 +27,9 @@ function App() {
       <SimpleSearch />
       {isLoaded && (
         <Switch>
+          <Route path="/tables/create" exact={true}>
+            <GameSubmissionForm />
+          </Route>
           <Route path="/tables/:tableId" exact={true}>
             <TableDetail />
           </Route>
@@ -35,6 +39,7 @@ function App() {
           <Route path="/tables/:tableId/apply">
             <GameApplicationForm />
           </Route>
+
           <Route path="/login" >
             <LoginFormPage />
           </Route>

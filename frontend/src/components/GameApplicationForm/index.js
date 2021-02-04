@@ -9,7 +9,6 @@ const GameApplicationForm = () => {
   const dispatch = useDispatch();
   const { tableId } = useParams();
   const history = useHistory();
-  const [query, setQuery] = useState("");
   const [playStyle, setPlayStyle] = useState("");
   const [characterConcept, setCharacterConcept] = useState("");
   const [whyJoin, setWhyJoin] = useState("");

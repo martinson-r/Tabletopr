@@ -82,9 +82,17 @@ router.get('/', asyncHandler(async (req, res) => {
                 gameTypeId,
                 gameSystemId,
                 languageId,
-                maxPlayers
+                languageId,
+                maxPlayers,
+                isOpen: true
             })
-            return res.json(createTable);
+            await createTable.save();
+
+            const returnTable = await Table.findOne({
+                where: { tableName, description, hostId: userId },
+                include: [GameSystem, GameType, User, Language, { model: TableReview, include: User }]
+            })
+            return res.json(returnTable);
         }
         return res.json('Must be logged in to create table')
      }));
