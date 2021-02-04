@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     denied: DataTypes.BOOLEAN
   }, {});
   Application.associate = function(models) {
-    // associations can be defined here
+    Application.belongsTo(models.Table, { foreignKey: "tableId", });
   };
   return Application;
 };

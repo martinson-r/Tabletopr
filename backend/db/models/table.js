@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     Table.belongsTo(models.User, { foreignKey: "hostId", });
     Table.belongsTo(models.Language, { foreignKey: "languageId", });
     Table.hasMany(models.TableReview, { foreignKey: "tableId", });
+    Table.hasMany(models.Application, { foreignKey: "tableId", });
   };
   return Table;
 };
