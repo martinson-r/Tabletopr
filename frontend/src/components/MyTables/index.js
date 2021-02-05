@@ -18,9 +18,6 @@ function MyTables() {
 
     let playingTables = [];
     const hostedTables = allUserTables.filter(table => table.hostId === sessionUser.id);
-
-
-        console.log('Trying to filter')
         allUserTables.forEach(table => {
             if (table.Player) {
               for (let i = 0; i < table.Player.length; i++) {

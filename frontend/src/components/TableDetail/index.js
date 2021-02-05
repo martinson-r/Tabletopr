@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-// import application from "../../../../backend/db/models/application";
 import { getSingleTable } from "../../store/tables";
 
 function TableDetail() {
@@ -14,16 +13,14 @@ function TableDetail() {
 
     useEffect(() => {
         dispatch(getSingleTable(tableId));
-        console.log("Got table");
-}, [dispatch, tableId]);
+    }, [dispatch, tableId]);
 
 useEffect(() => {
+    setApplicationStatus(false);
     if (table.Applications) {
-        console.log("Apps filtering");
-        if (table.Applications.length) {
             const matchingApp = table.Applications.filter(application => application.userId === sessionUser.id);
-            if (matchingApp) {
-                console.log('matchingApp', matchingApp)
+            console.log('MATCHING APP', matchingApp);
+            if (matchingApp.length) {
                 if (matchingApp[0].denied) {
                     setApplicationStatus([true, "Your application has been denied."])
                 } else if (matchingApp[0].approved) {
@@ -34,11 +31,9 @@ useEffect(() => {
                 }
             }
         }
-    }
+}, [table.id])
 
-}, [tableId])
-
-      if (!table.tableName) {
+      if (!table.tableName || !table.Applications) {
           return null;
       }
 

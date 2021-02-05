@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get('/', asyncHandler(async (req, res) => {
     const fetchTables = await Table.findAll({
-        include: [GameSystem, GameType, User]
+        include: [GameSystem, GameType, User, { model: Application, required: false}]
     })
     return res.json(fetchTables);
  }));
