@@ -23,10 +23,12 @@ const loadAllTables = (tableList) => ({
   };
 
   export const getPlayerTables = (playerId) => async (dispatch) => {
+    console.log('player tables got');
     const response = await fetch(`/api/tables/players/${playerId}`);
 
     if (response.ok) {
       const tables = await response.json();
+      console.log('THUNK TABLES', tables);
       dispatch(loadAllTables(tables));
     }
   };
@@ -49,10 +51,8 @@ const loadAllTables = (tableList) => ({
         query
       })
     });
-    console.log('TOKEN', Cookies.get('XSRF-TOKEN'))
     if (response.ok) {
       const tableResults = await response.json();
-      console.log('Search Results:   ', tableResults)
       dispatch(loadAllTables(tableResults));
     }
   };
