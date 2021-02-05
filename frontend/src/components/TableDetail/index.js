@@ -14,10 +14,12 @@ function TableDetail() {
 
     useEffect(() => {
         dispatch(getSingleTable(tableId));
-}, [dispatch]);
+        console.log("Got table");
+}, [dispatch, tableId]);
 
 useEffect(() => {
     if (table.Applications) {
+        console.log("Apps filtering");
         if (table.Applications.length) {
             const matchingApp = table.Applications.filter(application => application.userId === sessionUser.id);
             if (matchingApp) {
@@ -34,7 +36,7 @@ useEffect(() => {
         }
     }
 
-}, [table.Applications])
+}, [tableId])
 
       if (!table.tableName) {
           return null;

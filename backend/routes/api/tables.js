@@ -22,7 +22,6 @@ router.get('/', asyncHandler(async (req, res) => {
     const { user } = req;
     if (user !== undefined) {
         const userId = user.id;
-        console.log('USERID', userId)
         const fetchSingleTable = await Table.findOne({
             where: {id},
             include: [GameSystem, GameType, User, Language, { model: TableReview, include: User }, { model: Application, required: false, where: {
