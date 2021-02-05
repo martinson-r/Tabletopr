@@ -11,11 +11,18 @@ function Navigation({ isLoaded }){
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
+      <>
+      <NavLink to="/">Browse Tables</NavLink>
+      <NavLink to="/tables/create">Host a Table</NavLink>
+      <NavLink to={`/tables/players/${sessionUser.id}`}>My Tables</NavLink>
       <ProfileButton user={sessionUser} />
+      </>
     );
   } else {
     sessionLinks = (
       <>
+        <NavLink to="/">Browse Tables</NavLink>
+        <NavLink to="/tables/create">Host a Table</NavLink>
         <LoginFormModal />
         <NavLink to="/signup">Sign Up</NavLink>
       </>

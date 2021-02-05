@@ -4,7 +4,7 @@ const asyncHandler = require('express-async-handler');
 
 const { handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth');
-const { Table, GameSystem, GameType, User, Language, TableReview, Application } = require('../../db/models');
+const { Table, GameSystem, GameType, User, Language, TableReview, Application, PlayerList } = require('../../db/models');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
@@ -29,6 +29,29 @@ router.get('/', asyncHandler(async (req, res) => {
                 userId: userId
               }} ]
         })
+        return res.json(fetchSingleTable);
+    }
+    const fetchSingleTable = await Table.findOne({
+        where: {id},
+        include: [GameSystem, GameType, User, Language, { model: TableReview, include: User }]
+    })
+    return res.json(fetchSingleTable);
+ }));
+
+ router.get('/players/:playerId', restoreUser, asyncHandler(async (req, res) => {
+    const { user } = req;
+    if (user !== undefined) {
+        const userId = user.id;
+        console.log('****USERID****', userId)
+        const fetchSingleTable = await Table.findAll({
+            include: [GameSystem, GameType, User, Language,
+                { model: TableReview, include: User },
+                { model: User, as: 'Player', through: [PlayerList] } ,
+                { model: Application, required: false, where: {
+                userId: userId
+              }} ]
+        })
+        console.log('FETCH TABLE', fetchSingleTable)
         return res.json(fetchSingleTable);
     }
     const fetchSingleTable = await Table.findOne({

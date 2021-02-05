@@ -5,7 +5,8 @@ module.exports = (sequelize, DataTypes) => {
     playerId: DataTypes.INTEGER
   }, {});
   PlayerList.associate = function(models) {
-    // associations can be defined here
+    PlayerList.belongsTo(models.Table, { foreignKey: "tableId" });
+    PlayerList.belongsTo(models.User,{foreignKey: "playerId"});
   };
   return PlayerList;
 };

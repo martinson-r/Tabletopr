@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     Table.belongsTo(models.Language, { foreignKey: "languageId", });
     Table.hasMany(models.TableReview, { foreignKey: "tableId", });
     Table.hasMany(models.Application, { foreignKey: "tableId", });
+    Table.belongsToMany(models.User, {as: "Player", through: "PlayerList", foreignKey: "tableId", otherKey: "playerId", onDelete: 'cascade', hooks:true});
   };
   return Table;
 };

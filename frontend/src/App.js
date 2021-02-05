@@ -12,6 +12,7 @@ import SimpleSearch from "./components/SimpleSearch";
 import SearchResults from "./components/SearchResults";
 import GameApplicationForm from "./components/GameApplicationForm";
 import GameSubmissionForm from "./components/GameSubmissionForm";
+import MyTables from "./components/MyTables";
 
 function App() {
   const dispatch = useDispatch();
@@ -39,7 +40,9 @@ function App() {
           <Route path="/tables/:tableId/apply">
             <GameApplicationForm />
           </Route>
-
+          <Route path="/tables/players/:playerId">
+            <MyTables />
+          </Route>
           <Route path="/login" >
             <LoginFormPage />
           </Route>

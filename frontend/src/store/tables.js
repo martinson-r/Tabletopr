@@ -22,6 +22,16 @@ const loadAllTables = (tableList) => ({
     }
   };
 
+  export const getPlayerTables = (playerId) => async (dispatch) => {
+    const response = await fetch(`/api/tables/players/${playerId}`);
+
+    if (response.ok) {
+      const tables = await response.json();
+      dispatch(loadAllTables(tables));
+    }
+  };
+
+
   export const getSingleTable = (id) => async (dispatch) => {
     const response = await fetch(`/api/tables/${id}`);
     if (response.ok) {
