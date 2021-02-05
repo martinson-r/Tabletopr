@@ -17,6 +17,9 @@ function TableDetail() {
 
 useEffect(() => {
     setApplicationStatus(false);
+    if (table.hostId === sessionUser.id) {
+        setApplicationStatus([true, "You are currently hosting this game."])
+    }
     if (table.Applications) {
             const matchingApp = table.Applications.filter(application => application.userId === sessionUser.id);
             console.log('MATCHING APP', matchingApp);
@@ -31,6 +34,12 @@ useEffect(() => {
                 }
             }
         }
+    if (table.Player) {
+        const isPlaying = table.Player.filter(player => player.userId === sessionUser.id);
+        if (isPlaying.length) {
+            setApplicationStatus([true, "You are currently playing in this game."]);
+        }
+    }
 }, [table.id])
 
       if (!table.tableName || !table.Applications) {
