@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Application.associate = function(models) {
     Application.belongsTo(models.Table, { foreignKey: "tableId", });
+    Application.belongsTo(models.User, { foreignKey: "userId", });
   };
   return Application;
 };

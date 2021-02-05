@@ -13,6 +13,8 @@ import SearchResults from "./components/SearchResults";
 import GameApplicationForm from "./components/GameApplicationForm";
 import GameSubmissionForm from "./components/GameSubmissionForm";
 import MyTables from "./components/MyTables";
+import Applications from "./components/Applications";
+import ApplicationDetail from "./components/ApplicationDetail";
 
 function App() {
   const dispatch = useDispatch();
@@ -37,11 +39,17 @@ function App() {
           <Route path="/results">
             <SearchResults />
           </Route>
-          <Route path="/tables/:tableId/apply">
+          <Route path="/tables/:tableId/apply" exact={true}>
             <GameApplicationForm />
+          </Route>
+          <Route path="/tables/:tableId/applications" exact={true}>
+            <Applications />
           </Route>
           <Route path="/tables/players/:playerId">
             <MyTables />
+          </Route>
+          <Route path="/tables/:tableId/:playerId/application" exact={true}>
+            <ApplicationDetail />
           </Route>
           <Route path="/login" >
             <LoginFormPage />

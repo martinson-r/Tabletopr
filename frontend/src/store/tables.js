@@ -2,6 +2,8 @@ import Cookies from 'js-cookie';
 
 export const LOAD_TABLES = './locations/LOAD_TABLES';
 export const LOAD_SINGLE_TABLE = './locations/LOAD_SINGLE_TABLE';
+export const LOAD_ALL_APPLICATIONS = './locations/LOAD_ALL_APPLICATIONS';
+export const LOAD_SINGLE_APPLICATION = './locations/LOAD_SINGLE_APPLICATION';
 
 const loadAllTables = (tableList) => ({
     type: LOAD_TABLES,
@@ -13,12 +15,32 @@ const loadAllTables = (tableList) => ({
     table,
   });
 
+
+  const loadSingleApplication = (application) => ({
+    type: LOAD_SINGLE_APPLICATION,
+    application,
+  });
+
+  const loadAllApplications = (applications) => ({
+    type: LOAD_ALL_APPLICATIONS,
+    applications,
+  });
+
   export const getAllTables = () => async (dispatch) => {
     const response = await fetch(`/api/tables/`);
 
     if (response.ok) {
       const tables = await response.json();
       dispatch(loadAllTables(tables));
+    }
+  };
+
+  export const getAllApplications = (tableId) => async (dispatch) => {
+    const response = await fetch(`/api/tables/${tableId}/applications`);
+
+    if (response.ok) {
+      const applications = await response.json();
+      dispatch(loadAllApplications(applications));
     }
   };
 
@@ -102,10 +124,50 @@ const loadAllTables = (tableList) => ({
     }
   };
 
+  export const approveApplication = (payload) => async (dispatch) => {
+    const { approved, tableId, playerId } = payload;
+    console.log('payload', payload)
+    const response = await fetch(`/api/tables/${tableId}/${playerId}/application`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "XSRF-Token": `${Cookies.get('XSRF-TOKEN')}` },
+      body: JSON.stringify({
+        approved,
+        denied: false,
+        tableId,
+        playerId
+      })
+    });
+    if (response.ok) {
+      const applications = await response.json();
+      console.log('APPLICATIONS RESPONSE', applications);
+      dispatch(loadSingleApplication(applications));
+    }
+  };
+
+  export const denyApplication = (payload) => async (dispatch) => {
+    const { denied, tableId, playerId } = payload;
+    console.log('payload', payload)
+    const response = await fetch(`/api/tables/${tableId}/${playerId}/application`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "XSRF-Token": `${Cookies.get('XSRF-TOKEN')}` },
+      body: JSON.stringify({
+        approved: false,
+        denied,
+        tableId,
+        playerId
+      })
+    });
+    if (response.ok) {
+      const applications = await response.json();
+      dispatch(loadSingleApplication(applications));
+    }
+  };
+
 
   const initialState = {
     tableList: [],
-    table: {}
+    table: {},
+    applications: []
   }
 
   const tableReducer = (state = initialState, action) => {
@@ -123,6 +185,22 @@ const loadAllTables = (tableList) => ({
               table: action.table,
             };
         }
+        case LOAD_ALL_APPLICATIONS: {
+          return {
+            ...state,
+            applications: action.applications,
+          };
+      }
+      case LOAD_SINGLE_APPLICATION: {
+        // let applications = [];
+        // for (let key in action.application) {
+        //   applications.push(action.application[key])
+        // }
+        return {
+          ...state,
+          applications: [action.application]
+        };
+      }
     //     case ADD_LISTING: {
     //         if (!state[action.locationlist.id]) {
     //             const newState = {

@@ -52,6 +52,55 @@ router.get('/', asyncHandler(async (req, res) => {
     return res.json('Must log in');
  }));
 
+ router.get('/:tableId/:playerId/application', restoreUser, asyncHandler(async (req, res) => {
+    const { user } = req;
+    const { playerId } = req.params;
+    const { tableId } = req.params;
+    if (user !== undefined) {
+        const userId = user.id;
+        const fetchSingleApplication = await Application.findOne({
+            where: { playerId, tableId },
+            include: { model: Table, where: { hostId: userId }}
+        })
+        return res.json(fetchSingleApplication);
+    }
+    return res.json('Must log in');
+ }));
+
+ router.post('/:tableId/:playerId/application', restoreUser, asyncHandler(async (req, res) => {
+    const { user } = req;
+    const { playerId, tableId, approved, denied } = req.body;
+    if (user !== undefined) {
+        const userId = user.id;
+        const fetchSingleApplication = await Application.findOne({
+            where: { userId: playerId, tableId },
+            include: [User, { model: Table, where: { hostId: userId }}]
+        })
+        if (fetchSingleApplication) {
+            await fetchSingleApplication.update({
+                approved,
+                denied
+            });
+        }
+        return res.json(fetchSingleApplication);
+    }
+    return res.json('Must log in');
+ }));
+
+ router.get('/:tableId/applications', restoreUser, asyncHandler(async (req, res) => {
+    const { user } = req;
+    const { tableId } = req.params;
+    if (user !== undefined) {
+        const userId = user.id;
+        const fetchSingleApplication = await Application.findAll({
+            where: { tableId },
+            include: [{ model: Table, where: { hostId: userId }}, User]
+        })
+        return res.json(fetchSingleApplication);
+    }
+    return res.json('Must log in');
+ }));
+
  router.post('/search', asyncHandler(async(req, res) => {
     const { query } = req.body;
     const searchTables = await Table.findAll({
