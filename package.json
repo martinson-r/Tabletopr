@@ -12,6 +12,12 @@
     "sequelize-cli": "npm run --prefix backend sequelize-cli",
     "start": "npm start --prefix backend"
   },
+  "production": {
+    "ssl": {
+      "require": true,
+      "rejectUnauthorized": false
+    },
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"
