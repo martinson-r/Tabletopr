@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, NavLink } from "react-router-dom";
 import SignupFormPage from "./components/SignupFormPage";
+import LoginFormPage from "./components/LoginFormPage";
+import Home from "./components/Home";
+import TableDetail from "./components/TableDetail";
 // import LoginFormPage from "./components/LoginFormPage";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
+import SimpleSearch from "./components/SimpleSearch";
+import SearchResults from "./components/SearchResults";
+import GameApplicationForm from "./components/GameApplicationForm";
+import GameSubmissionForm from "./components/GameSubmissionForm";
+import MyTables from "./components/MyTables";
+import Applications from "./components/Applications";
+import ApplicationDetail from "./components/ApplicationDetail";
 
 function App() {
   const dispatch = useDispatch();
@@ -15,14 +25,40 @@ function App() {
 
   return (
     <>
+      <h1><NavLink exact to="/">Tabletopr</NavLink></h1>
       <Navigation isLoaded={isLoaded} />
+      <SimpleSearch />
       {isLoaded && (
         <Switch>
-          {/* <Route path="/login" >
+          <Route path="/tables/create" exact={true}>
+            <GameSubmissionForm />
+          </Route>
+          <Route path="/tables/:tableId" exact={true}>
+            <TableDetail />
+          </Route>
+          <Route path="/results">
+            <SearchResults />
+          </Route>
+          <Route path="/tables/:tableId/apply" exact={true}>
+            <GameApplicationForm />
+          </Route>
+          <Route path="/tables/:tableId/applications" exact={true}>
+            <Applications />
+          </Route>
+          <Route path="/tables/players/:playerId">
+            <MyTables />
+          </Route>
+          <Route path="/tables/:tableId/:playerId/application" exact={true}>
+            <ApplicationDetail />
+          </Route>
+          <Route path="/login" >
             <LoginFormPage />
-          </Route> */}
+          </Route>
           <Route path="/signup">
             <SignupFormPage />
+          </Route>
+          <Route path="/" exact={true}>
+            <Home />
           </Route>
         </Switch>
       )}
