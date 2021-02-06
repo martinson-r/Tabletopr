@@ -16,8 +16,7 @@ module.exports = {
     seederStorage: "sequelize",
   },
   production: {
-    sslmode: "require",
-    use_env_variable: "DATABASE_URL",
+    use_env_variable: "DATABASE_URL" + "?sslmode=require",
     dialect: "postgres",
     seederStorage: "sequelize",
   },
