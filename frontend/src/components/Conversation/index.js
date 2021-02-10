@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import { getAllTables } from "../../store/tables";
 // import "./Home.css";
 
-function Conversation({ messages, username, handleLeave, handleSendMessage}) {
+function Conversation({ messages, recipient, username, handleLeave, handleSendMessage}) {
 
     const dispatch = useDispatch();
     const tables = useSelector(state => state.tables.tableList);
     const [message, setMessage] = useState('');
-
+    
     const handleSendOnClick = () => {
         handleSendMessage(message);
         setMessage('');
@@ -33,7 +33,7 @@ function Conversation({ messages, username, handleLeave, handleSendMessage}) {
         <>
         {/* eventually map out conversations here by recipient */}
         {/* <Conversation messages={messages}/> */}
-        <h2>{username}'s Messages</h2>
+        <h2>{username}'s Conversation With {recipient.username}</h2>
         <input type="text" value={message} onChange={handleOnChange} />
         <button type="button" onClick={handleSendOnClick}>Send</button>
         {messages.map(message => (

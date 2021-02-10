@@ -20,9 +20,6 @@ import Messages from "./components/Messages";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
-  // const [username, setUsername] = useState('');
-
-  const [recipient, setRecipient] = useState('');
 
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));

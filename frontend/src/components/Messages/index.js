@@ -17,6 +17,19 @@ function Messages() {
     const [username, setUsername] = useState('');
     const [recipient, setRecipient] = useState('');
     const webSocket = useRef(null);
+    const recipients = [
+        {id: 500,
+        username: 'Scarywizard'},
+        {id: 501,
+        username: 'LuckyFromFlorida'},
+        {id: 502,
+        username: 'RougeRogue'},
+    ]
+
+    useEffect(() => {
+        console.log('Recipient....', recipient)
+    },[recipient])
+
 
     const sessionUser = useSelector((state) => state.session.user);
 
@@ -53,11 +66,6 @@ function Messages() {
 
     webSocket.current = ws;
 
-    webSocket.current.onmessage = (event) => {
-        console.log('onmessage', event)
-    }
-
-
     return function cleanup() {
       if (webSocket.current !== null) {
         webSocket.current.close();
@@ -70,9 +78,7 @@ function Messages() {
     if (webSocket.current !== null) {
         console.log('NOT NULL', webSocket.current);
           webSocket.current.onmessage = (event) => {
-          console.log(`Processing incoming message`);
           const chatMessage = JSON.parse(event.data);
-          console.log('incoming message', chatMessage)
           const message = chatMessage.data;
 
           //date was JSON formatted, we need to convert it back to a Date object.
@@ -90,7 +96,7 @@ function Messages() {
     const newMessage = {
       uuid: uuid(),
       username,
-      recipient,
+      recipient: recipient.username,
       message,
       created: new Date(),
     }
@@ -129,7 +135,12 @@ const handleLeave = () => {
 
     return (
         <>
-        <Conversation username={username} messages={messages} handleSendMessage={handleSendMessage} handleOnChange={handleOnChange} />
+        <div>
+            <h2>Conversations</h2>
+            {recipients.map(recipient => <div onClick={() =>setRecipient(recipient)}>{recipient.username}</div>)}
+        </div>
+        {recipient && (<div><Conversation username={username} recipient={recipient} messages={messages} handleSendMessage={handleSendMessage} handleOnChange={handleOnChange} /></div>)}
+
      </>
     )
 }
