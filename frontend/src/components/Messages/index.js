@@ -35,6 +35,8 @@ function Messages() {
 
     ws.onopen = (event) => {
       console.log(`Connection open: ${event}`);
+
+      //set messages to trigger other useEffect
       setMessages([]);
     }
 
@@ -51,6 +53,11 @@ function Messages() {
 
     webSocket.current = ws;
 
+    webSocket.current.onmessage = (event) => {
+        console.log('onmessage', event)
+    }
+
+
     return function cleanup() {
       if (webSocket.current !== null) {
         webSocket.current.close();
@@ -59,10 +66,12 @@ function Messages() {
   },[username])
 
   useEffect(() => {
+      console.log('useeffect triggered');
       if (webSocket.current !== null) {
-        webSocket.current.onmessage = (e) => {
+          console.log('NOT NULL', webSocket.current);
+        webSocket.current.onmessage = (event) => {
             console.log(`Processing incoming message`);
-            const chatMessage = JSON.parse(e.data);
+            const chatMessage = JSON.parse(event.data);
             console.log('incoming message', chatMessage)
             const message = chatMessage.data;
 
@@ -70,6 +79,7 @@ function Messages() {
             message.created = new Date(message.created);
 
             setMessages([message, ...messages]);
+            console.log(messages);
           }
       }
   }, [messages])
@@ -89,16 +99,12 @@ function Messages() {
     });
 
     console.log(`Sending message ${jsonNewMessage}...`);
-    console.log('current websocket', webSocket.current)
     webSocket.current.send(jsonNewMessage);
 };
 
 const handleLeave = () => {
   setUsername('');
 };
-
-
-    console.log(messages);
 
     const handleSendOnClick = () => {
         handleSendMessage(message);

@@ -24,13 +24,15 @@ wss.on('connection', (ws) => {
     const jsonAddChatMessage = JSON.stringify(addChatMessage);
     console.log(`Sending message ${jsonAddChatMessage}`);
 
-    wss.clients.forEach = (client) => {
+    wss.clients.forEach((client) => {
       //Ready states include:
       //CONNECTING, OPEN, CLOSING, CLOSED
+      console.log('client ready state', client.readyState);
       if (client.readyState === WebSocket.OPEN) {
+        console.log('message sent:', jsonAddChatMessage);
         client.send(jsonAddChatMessage);
       }
-    }
+    });
   });
   ws.on('close', (event) => {
     console.log(event);
