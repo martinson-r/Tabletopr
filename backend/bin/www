@@ -1,9 +1,23 @@
 #!/usr/bin/env node
 
 const { port } = require('../config');
-
+const { createServer } = require('http');
 const app = require('../app');
 const db = require('../db/models');
+const WebSocket = require('ws');
+
+const server = createServer(app);
+
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', (ws) => {
+  ws.on('message', (jsonData) => {
+    console.log(`Processing incoming message ${jsonData}...`);
+  });
+  ws.on('close', (event) => {
+    console.log(event);
+  })
+});
 
 // Check the database connection before starting the app
 db.sequelize
@@ -12,7 +26,7 @@ db.sequelize
     console.log('Database connection success! Sequelize is ready to use...');
 
     // Start listening for connections
-    app.listen(port, () => console.log(`Listening on port ${port}...`));
+    server.listen(port, () => console.log(`Listening on port ${port}...`));
   })
   .catch((err) => {
     console.log('Database connection failure.');
