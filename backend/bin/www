@@ -13,6 +13,24 @@ const wss = new WebSocket.Server({ server });
 wss.on('connection', (ws) => {
   ws.on('message', (jsonData) => {
     console.log(`Processing incoming message ${jsonData}...`);
+    const message = JSON.parse(jsonData);
+    const chatMessage = message.data;
+
+    const addChatMessage = {
+      type: 'add-chat-message',
+      data: chatMessage,
+    };
+
+    const jsonAddChatMessage = JSON.stringify(addChatMessage);
+    console.log(`Sending message ${jsonAddChatMessage}`);
+
+    wss.clients.forEach = (client) => {
+      //Ready states include:
+      //CONNECTING, OPEN, CLOSING, CLOSED
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(jsonAddChatMessage);
+      }
+    }
   });
   ws.on('close', (event) => {
     console.log(event);
