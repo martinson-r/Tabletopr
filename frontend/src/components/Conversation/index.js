@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { getAllTables } from "../../store/tables";
 // import "./Home.css";
 
-function Conversation({ messages, handleSendMessage, handleLeave}) {
+function Conversation({ messages, username, handleLeave, handleSendMessage}) {
 
     const dispatch = useDispatch();
     const tables = useSelector(state => state.tables.tableList);
@@ -14,6 +14,11 @@ function Conversation({ messages, handleSendMessage, handleLeave}) {
         handleSendMessage(message);
         setMessage('');
     };
+
+    const handleOnChange = (e) => {
+        setMessage(e.target.value);
+        console.log('Message', message)
+    }
 
     const handleLeaveOnClick = () => {
         handleLeave();
@@ -26,14 +31,14 @@ function Conversation({ messages, handleSendMessage, handleLeave}) {
 
     return (
         <>
-        {/* <p>Newest Tables:</p>
-            <div className="card-container">
-            {tables.map(table =>(<Link to={`/tables/${table.id}`}>
-                {<div className="table-card"><p>{table.GameSystem.gameSystem}:
-                <br />{table.tableName}</p><p>Hosted by:<br />{table.User.username}</p>
-                </div>}</Link>))}
-            </div> */}
-        <h2>Messages</h2>
+        {/* eventually map out conversations here by recipient */}
+        {/* <Conversation messages={messages}/> */}
+        <h2>{username}'s Messages</h2>
+        <input type="text" value={message} onChange={handleOnChange} />
+        <button type="button" onClick={handleSendOnClick}>Send</button>
+        {messages.map(message => (
+            <p key={message.id}>({message.created.toLocaleTimeString()}){message.username}: <strong>{message.message}</strong></p>)
+            )}
      </>
     )
 }

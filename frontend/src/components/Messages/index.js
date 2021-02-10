@@ -63,26 +63,28 @@ function Messages() {
         webSocket.current.close();
       }
     }
-  },[username])
+  },[username]);
 
   useEffect(() => {
-      console.log('useeffect triggered');
-      if (webSocket.current !== null) {
-          console.log('NOT NULL', webSocket.current);
-        webSocket.current.onmessage = (event) => {
-            console.log(`Processing incoming message`);
-            const chatMessage = JSON.parse(event.data);
-            console.log('incoming message', chatMessage)
-            const message = chatMessage.data;
+    console.log('useeffect triggered');
+    if (webSocket.current !== null) {
+        console.log('NOT NULL', webSocket.current);
+          webSocket.current.onmessage = (event) => {
+          console.log(`Processing incoming message`);
+          const chatMessage = JSON.parse(event.data);
+          console.log('incoming message', chatMessage)
+          const message = chatMessage.data;
 
-            //date was JSON formatted, we need to convert it back to a Date object.
-            message.created = new Date(message.created);
+          //date was JSON formatted, we need to convert it back to a Date object.
+          message.created = new Date(message.created);
 
-            setMessages([message, ...messages]);
-            console.log(messages);
-          }
-      }
-  }, [messages])
+          setMessages([message, ...messages]);
+          console.log(messages);
+        }
+    }
+}, [messages])
+
+
 
   const handleSendMessage = (message) => {
     const newMessage = {
@@ -127,14 +129,7 @@ const handleLeave = () => {
 
     return (
         <>
-        {/* eventually map out conversations here by recipient */}
-        {/* <Conversation messages={messages}/> */}
-        <h2>{username}'s Messages</h2>
-        <input type="text" value={message} onChange={handleOnChange} />
-        <button type="button" onClick={handleSendOnClick}>Send</button>
-        {messages.map(message => (
-            <p key={message.id}>({message.created.toLocaleTimeString()}){message.username}: <strong>{message.message}</strong></p>)
-            )}
+        <Conversation username={username} messages={messages} handleSendMessage={handleSendMessage} handleOnChange={handleOnChange} />
      </>
     )
 }
