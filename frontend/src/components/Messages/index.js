@@ -24,6 +24,8 @@ function Messages() {
         username: 'LuckyFromFlorida'},
         {id: 502,
         username: 'RougeRogue'},
+        {id: 502,
+        username: 'hanasays'},
     ]
 
     useEffect(() => {
@@ -83,9 +85,12 @@ function Messages() {
 
           //date was JSON formatted, we need to convert it back to a Date object.
           message.created = new Date(message.created);
-
-          setMessages([message, ...messages]);
-          console.log(messages);
+          console.log('recipient', message.recipient);
+          console.log('username', message.username);
+            if ((message.recipient === username) || (message.username === username)) {
+                setMessages([message, ...messages]);
+                console.log(messages);
+            }
         }
     }
 }, [messages])
