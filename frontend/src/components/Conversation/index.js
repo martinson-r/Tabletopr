@@ -9,7 +9,7 @@ function Conversation({ messages, recipient, username, handleLeave, handleSendMe
     const dispatch = useDispatch();
     const tables = useSelector(state => state.tables.tableList);
     const [message, setMessage] = useState('');
-    
+
     const handleSendOnClick = () => {
         handleSendMessage(message);
         setMessage('');
@@ -17,7 +17,6 @@ function Conversation({ messages, recipient, username, handleLeave, handleSendMe
 
     const handleOnChange = (e) => {
         setMessage(e.target.value);
-        console.log('Message', message)
     }
 
     const handleLeaveOnClick = () => {
@@ -26,7 +25,6 @@ function Conversation({ messages, recipient, username, handleLeave, handleSendMe
 
     useEffect(() => {
         dispatch(getAllTables());
-        console.log("Got all tables");
       }, [dispatch]);
 
     return (

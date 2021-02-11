@@ -2,31 +2,23 @@ import { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { getAllTables } from "../../store/tables";
+import { getFellowPlayers } from "../../store/tables";
 import Conversation from "../Conversation";
 import { v4 as uuid } from 'uuid';
 
-// import "./Home.css";
-
 function Messages() {
 
-
     const dispatch = useDispatch();
+
     const tables = useSelector(state => state.tables.tableList);
+    const playerLists = useSelector(state => state.tables.players)
+    const [recipientList, setRecipientList] = useState([]);
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState('');
     const [recipient, setRecipient] = useState('');
+
     const webSocket = useRef(null);
-    const recipients = [
-        {id: 500,
-        username: 'Scarywizard'},
-        {id: 501,
-        username: 'LuckyFromFlorida'},
-        {id: 502,
-        username: 'RougeRogue'},
-        {id: 502,
-        username: 'hanasays'},
-    ]
 
     useEffect(() => {
         console.log('Recipient....', recipient)
@@ -37,9 +29,35 @@ function Messages() {
 
     useEffect(() => {
         if (sessionUser) {
-        setUsername(sessionUser.username)
+        setUsername(sessionUser.username);
         }
+        dispatch(getFellowPlayers())
   }, [])
+
+  useEffect(() => {
+      if (playerLists !== undefined) {
+          if (playerLists.length > 0) {
+              console.log('playerlists length')
+              console.log(playerLists)
+
+              const players = playerLists.map(list => list.Table.PlayerLists);
+              let joinedPlayerList = [];
+              for (let i = 0; i < players.length; i++) {
+                joinedPlayerList = joinedPlayerList.concat(players[i]);
+              }
+
+              //filter current player out of contact list
+              const filteredList = joinedPlayerList.filter( item => item.playerId !== sessionUser.id )
+              console.log('FILTERED', filteredList);
+
+              const deDupe = filteredList.filter((v,index,a)=>a.findIndex(t=>( t.playerId === v.playerId ))===index)
+              console.log('DEDUPE', deDupe);
+
+
+              setRecipientList([...deDupe]);
+            }
+          }
+  },[playerLists])
 
   useEffect(() => {
     if(!username) {
@@ -141,11 +159,12 @@ const handleLeave = () => {
     return (
         <>
         <div>
-            <h2>Conversations</h2>
-            {recipients.map(recipient => <div onClick={() =>setRecipient(recipient)}>{recipient.username}</div>)}
+            <h2>Contacts</h2>
+            {recipientList.map(recipient => <div onClick={() =>setRecipient(recipient.User)}>{recipient.User.username}</div>)}
         </div>
-        {recipient && (<div><Conversation username={username} recipient={recipient} messages={messages} handleSendMessage={handleSendMessage} handleOnChange={handleOnChange} /></div>)}
-
+        <div>
+            {recipient && (<div><Conversation username={username} recipient={recipient} messages={messages} handleSendMessage={handleSendMessage} handleOnChange={handleOnChange} /></div>)}
+        </div>
      </>
     )
 }

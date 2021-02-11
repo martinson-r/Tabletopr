@@ -4,6 +4,7 @@ export const LOAD_TABLES = './locations/LOAD_TABLES';
 export const LOAD_SINGLE_TABLE = './locations/LOAD_SINGLE_TABLE';
 export const LOAD_ALL_APPLICATIONS = './locations/LOAD_ALL_APPLICATIONS';
 export const LOAD_SINGLE_APPLICATION = './locations/LOAD_SINGLE_APPLICATION';
+export const LOAD_FELLOW_PLAYERS = './locations/LOAD_FELLOW_PLAYERS';
 
 const loadAllTables = (tableList) => ({
     type: LOAD_TABLES,
@@ -25,6 +26,11 @@ const loadAllTables = (tableList) => ({
     type: LOAD_ALL_APPLICATIONS,
     applications,
   });
+
+  const loadFellowPlayers = (players) => ({
+    type: LOAD_FELLOW_PLAYERS,
+    players,
+  })
 
   export const getAllTables = () => async (dispatch) => {
     const response = await fetch(`/api/tables/`);
@@ -163,6 +169,16 @@ const loadAllTables = (tableList) => ({
     }
   };
 
+  export const getFellowPlayers = () => async (dispatch) => {
+
+      const response = await fetch('api/tables/playerlists');
+
+      if (response.ok) {
+        const playerList = await response.json();
+        dispatch(loadFellowPlayers(playerList));
+      };
+  };
+
 
   const initialState = {
     tableList: [],
@@ -200,6 +216,12 @@ const loadAllTables = (tableList) => ({
           ...state,
           applications: [action.application]
         };
+      }
+      case LOAD_FELLOW_PLAYERS: {
+        return {
+          ...state,
+          players: action.players,
+        }
       }
     //     case ADD_LISTING: {
     //         if (!state[action.locationlist.id]) {

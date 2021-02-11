@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     Table.belongsTo(models.GameType, { foreignKey: "gameTypeId", });
     Table.belongsTo(models.User, { foreignKey: "hostId", });
     Table.belongsTo(models.Language, { foreignKey: "languageId", });
+    Table.hasMany(models.PlayerList, { foreignKey: "tableId" })
     Table.hasMany(models.TableReview, { foreignKey: "tableId", });
     Table.hasMany(models.Application, { foreignKey: "tableId", });
     Table.belongsToMany(models.User, {as: "Player", through: "PlayerList", foreignKey: "tableId", otherKey: "playerId", onDelete: 'cascade', hooks:true});
