@@ -1,1 +1,28 @@
-/* TODO Add site wide styles */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Roboto+Slab&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+body {
+    background-color: #f4f0e6;
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
+    padding: 20px;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 900;
+    font-size: 60px;
+}
+
+h1 a {
+    color: black;
+}
+
+.header {
+    margin: 0 auto;
+    text-align: center;
+}
