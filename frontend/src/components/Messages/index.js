@@ -5,6 +5,7 @@ import { getAllTables } from "../../store/tables";
 import { getFellowPlayers } from "../../store/tables";
 import Conversation from "../Conversation";
 import { v4 as uuid } from 'uuid';
+import Cookies from 'js-cookie';
 
 function Messages() {
 
@@ -31,7 +32,17 @@ function Messages() {
         if (sessionUser) {
         setUsername(sessionUser.username);
         }
-        dispatch(getFellowPlayers())
+        dispatch(getFellowPlayers());
+
+        const getOldMessages = async() => {
+            const data = await fetch(`/api/messages/${sessionUser.id}`);
+            if (data.ok) {
+                const oldMessages = await data.json();
+                console.log('OLD MESSAGES', oldMessages)
+            }
+        }
+        getOldMessages();
+
   }, [])
 
   useEffect(() => {
@@ -133,6 +144,24 @@ function Messages() {
     console.log(`Sending message ${jsonNewMessage}...`);
     console.log(webSocket.current);
     webSocket.current.send(jsonNewMessage);
+
+
+    const saveMessage = async() => {
+        const response = await fetch(`/api/messages/${sessionUser.id}/${recipient.id}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "XSRF-Token": `${Cookies.get('XSRF-TOKEN')}` },
+            body: JSON.stringify({
+              message
+            })
+          });
+          if (response.ok) {
+            const messagesFromServer = await response.json();
+            console.log('FROM SERVER', messagesFromServer)
+            // dispatch(loadAllTables(messagesFromServer));
+          }
+        }
+        saveMessage();
+
 };
 
 const handleLeave = () => {
@@ -156,6 +185,15 @@ const handleLeave = () => {
     useEffect(() => {
         dispatch(getAllTables());
         console.log("Got all tables");
+
+        const getMessages = async() => {
+            const data = await fetch('/api/messages');
+            const messages = await data.json();
+            console.log('MESSAGES', messages);
+        }
+
+        getMessages();
+
       }, [dispatch]);
 
     return (

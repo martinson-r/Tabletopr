@@ -8,6 +8,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   MessageJoin.associate = function(models) {
     // associations can be defined here
+    MessageJoin.belongsTo(models.User, { foreignKey: "recipientId" });
+    MessageJoin.belongsTo(models.Message, { foreignKey: "messageId"  })
+    // MessageJoin.belongsTo(models.User, {foreignKey: "playerId"});
   };
   return MessageJoin;
 };

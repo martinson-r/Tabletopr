@@ -179,7 +179,6 @@ const loadAllTables = (tableList) => ({
       };
   };
 
-
   const initialState = {
     tableList: [],
     table: {},
