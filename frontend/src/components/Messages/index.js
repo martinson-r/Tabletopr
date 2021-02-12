@@ -204,6 +204,12 @@ const handleLeave = () => {
 
       }, [dispatch]);
 
+      if ( recipientList.length === 0 ) {
+          return (
+              <p>You can't message anyone until you join a game. Join some games, and then you will be able to message your fellow players!</p>
+          )
+      }
+
     return (
         <>
         <div>

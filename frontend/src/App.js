@@ -36,9 +36,9 @@ function App() {
       {!sessionUser&&<NavLink to="/signup">Sign Up</NavLink>}
       {!sessionUser&&<LoginFormModal />}
       {sessionUser&&(<div onClick={logout}>Log Out</div>)}
+      <SimpleSearch />
       <h1 className="header"><NavLink exact to="/">Tabletopr</NavLink></h1>
       <Navigation isLoaded={isLoaded} />
-      <SimpleSearch />
       {isLoaded && (
         <Switch>
           <Route path="/tables/create" exact={true}>
