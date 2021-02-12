@@ -27,13 +27,16 @@ function App() {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
 
-
+  const logout = (e) => {
+    e.preventDefault();
+    dispatch(sessionActions.logout());
+  };
 
   return (
     <>
       {!sessionUser&&<NavLink to="/signup">Sign Up</NavLink>}
       {!sessionUser&&<LoginFormModal />}
-      {sessionUser&&(<div class="profileButton"><ProfileButton user={sessionUser} /></div>)}
+      {sessionUser&&(<div onClick={logout}>Log Out</div>)}
       <h1 className="header"><NavLink exact to="/">Tabletopr</NavLink></h1>
       <Navigation isLoaded={isLoaded} />
       <SimpleSearch />
