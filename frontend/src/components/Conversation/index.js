@@ -6,6 +6,14 @@ import { getAllTables } from "../../store/tables";
 
 function Conversation({ messages, recipient, username, handleLeave, handleSendMessage}) {
 
+    const sortedMessages = messages.sort((a, b) => {
+        let c = new Date(a.createdAt);
+    var d = new Date(b.createdAt);
+    return c-d
+    });
+    
+    console.log('SORTED', sortedMessages);
+
     const dispatch = useDispatch();
     const tables = useSelector(state => state.tables.tableList);
     const [message, setMessage] = useState('');

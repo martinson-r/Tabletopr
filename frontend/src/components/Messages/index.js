@@ -124,7 +124,7 @@ function Messages() {
           //date was JSON formatted, we need to convert it back to a Date object.
           message.created = new Date(message.created);
             // if ((message.recipient === username) || (message.username === username)) {
-                setMessages([message, ...messages]);
+                setMessages([...messages, message]);
         //   }
         console.log('Message structure', message)
         }
@@ -215,7 +215,8 @@ const handleLeave = () => {
         <div>
             {recipient && (<div><Conversation username={username}
             recipient={recipient}
-            messages={messages}
+            messages={messages.filter(message => (message.Recipient.username === username && message.User.username === recipient.username)
+                || (message.User.username === username && message.Recipient.username === recipient.username))}
             handleSendMessage={handleSendMessage}
             handleOnChange={handleOnChange} /></div>)}
         </div>
