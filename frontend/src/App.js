@@ -16,7 +16,6 @@ import MyTables from "./components/MyTables";
 import Applications from "./components/Applications";
 import ApplicationDetail from "./components/ApplicationDetail";
 import Messages from "./components/Messages";
-import ProfileButton from "./components/Navigation/ProfileButton";
 
 function App() {
   const dispatch = useDispatch();
@@ -71,6 +70,9 @@ function App() {
           </Route>
           <Route path="/signup">
             <SignupFormPage />
+          </Route>
+          <Route path="/messages">
+            <Messages />
           </Route>
           <Route path="/" exact={true}>
             <Home />

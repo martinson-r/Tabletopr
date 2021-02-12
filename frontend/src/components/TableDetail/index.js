@@ -42,7 +42,10 @@ useEffect(() => {
             }
         }
     }
-}, [table.id])
+    if (sessionUser === undefined) {
+        setApplicationStatus([true, "Please sign up or log in to apply."])
+    }
+}, [table.id, table.Applications, sessionUser])
 
       if (!table.tableName) {
           return null;

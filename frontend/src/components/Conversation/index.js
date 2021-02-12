@@ -11,7 +11,7 @@ function Conversation({ messages, recipient, username, handleLeave, handleSendMe
     var d = new Date(b.createdAt);
     return c-d
     });
-    
+
     console.log('SORTED', sortedMessages);
 
     const dispatch = useDispatch();
@@ -43,11 +43,11 @@ function Conversation({ messages, recipient, username, handleLeave, handleSendMe
         {/* eventually map out conversations here by recipient */}
         {/* <Conversation messages={messages}/> */}
         <h2>{username}'s Conversation With {recipient.username}</h2>
-        <input type="text" value={message} onChange={handleOnChange} />
-        <button type="button" onClick={handleSendOnClick}>Send</button>
         {messages.map(message =>  (
             <p key={message.id}><strong>{message.User.username}</strong>: {message.content}</p>)
             )}
+        <input type="text" value={message} onChange={handleOnChange} />
+        <button type="button" onClick={handleSendOnClick}>Send</button>
      </>
     )
 }

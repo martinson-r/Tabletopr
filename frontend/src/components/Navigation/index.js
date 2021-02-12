@@ -15,6 +15,7 @@ function Navigation({ isLoaded }){
       <NavLink to="/">Browse Tables</NavLink>
       <NavLink to="/tables/create">Host a Table</NavLink>
       <NavLink to={`/tables/players/${sessionUser.id}`}>My Tables</NavLink>
+      <NavLink to={`/messages`}>My Messages</NavLink>
       {/* <ProfileButton user={sessionUser} /> */}
       </navigation>
     );
