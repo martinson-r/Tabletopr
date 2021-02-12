@@ -22,9 +22,10 @@ router.get('/:userId', asyncHandler(async (req, res) => {
     console.log('GET MESSAGES ROUTE HIT');
     const userId = req.params.userId;
     const fetchAllUserMessages = await Message.findAll({
-        where: {
-            userId
-          },
+        where: { [Op.or]: {
+            userId,
+            recipientId: userId
+        } },
         include: [User, {model: User, as: "Recipient" }]
     })
     return res.json(fetchAllUserMessages);

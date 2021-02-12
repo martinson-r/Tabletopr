@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { getAllTables } from "../../store/tables";
 import { getFellowPlayers } from "../../store/tables";
+import { saveUserMessages } from "../../store/messages";
+import { loadUserMessages } from "../../store/messages";
 import Conversation from "../Conversation";
 import { v4 as uuid } from 'uuid';
 import Cookies from 'js-cookie';
@@ -12,7 +14,8 @@ function Messages() {
     const dispatch = useDispatch();
 
     const tables = useSelector(state => state.tables.tableList);
-    const playerLists = useSelector(state => state.tables.players)
+    const playerLists = useSelector(state => state.tables.players);
+    const oldMessages = useSelector(state => state.messages.messages);
     const [recipientList, setRecipientList] = useState([]);
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
@@ -33,15 +36,7 @@ function Messages() {
         setUsername(sessionUser.username);
         }
         dispatch(getFellowPlayers());
-
-        const getOldMessages = async() => {
-            const data = await fetch(`/api/messages/${sessionUser.id}`);
-            if (data.ok) {
-                const oldMessages = await data.json();
-                console.log('OLD MESSAGES', oldMessages)
-            }
-        }
-        getOldMessages();
+        dispatch(loadUserMessages(sessionUser.id));
 
   }, [])
 
@@ -80,10 +75,22 @@ function Messages() {
     const ws = new WebSocket(process.env.REACT_APP_WS_URL);
 
     ws.onopen = (event) => {
+
       console.log(`Connection open: ${event}`);
 
       //set messages to trigger other useEffect
-      setMessages([]);
+
+      const getOldMessages = async() => {
+        const data = await fetch(`/api/messages/${sessionUser.id}`);
+        if (data.ok) {
+            const oldMessages = await data.json();
+            setMessages([...oldMessages]);
+            console.log('OLD MESSAGES', oldMessages);
+            console.log('MESSAGES AFTER SET', messages)
+        }
+    }
+    getOldMessages();
+
     }
 
     ws.onerror = (event) => {
@@ -116,11 +123,10 @@ function Messages() {
 
           //date was JSON formatted, we need to convert it back to a Date object.
           message.created = new Date(message.created);
-          console.log('recipient', message.recipient);
-          console.log('username', message.username);
-            if ((message.recipient === username) || (message.username === username)) {
+            // if ((message.recipient === username) || (message.username === username)) {
                 setMessages([message, ...messages]);
-            }
+        //   }
+        console.log('Message structure', message)
         }
     }
 }, [messages])
@@ -131,9 +137,10 @@ function Messages() {
     const newMessage = {
       uuid: uuid(),
       username,
-      recipient: recipient.username,
-      message,
-      created: new Date(),
+      Recipient: recipient,
+      User: sessionUser,
+      content: message,
+      createdAt: new Date(),
     }
 
     const jsonNewMessage = JSON.stringify({
@@ -141,8 +148,9 @@ function Messages() {
       data: newMessage,
     });
 
-    console.log(`Sending message ${jsonNewMessage}...`);
     console.log(webSocket.current);
+
+    console.log(`Sending message ${jsonNewMessage}...`);
     webSocket.current.send(jsonNewMessage);
 
 
@@ -157,7 +165,7 @@ function Messages() {
           if (response.ok) {
             const messagesFromServer = await response.json();
             console.log('FROM SERVER', messagesFromServer)
-            // dispatch(loadAllTables(messagesFromServer));
+            // dispatch(loadAllMessages(messagesFromServer));
           }
         }
         saveMessage();
@@ -207,11 +215,10 @@ const handleLeave = () => {
         <div>
             {recipient && (<div><Conversation username={username}
             recipient={recipient}
-            messages={messages.filter(message => message.recipient === recipient.username)}
+            messages={messages}
             handleSendMessage={handleSendMessage}
             handleOnChange={handleOnChange} /></div>)}
         </div>
-        {console.log(messages)}
      </>
     )
 }

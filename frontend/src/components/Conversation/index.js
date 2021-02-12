@@ -10,7 +10,10 @@ function Conversation({ messages, recipient, username, handleLeave, handleSendMe
     const tables = useSelector(state => state.tables.tableList);
     const [message, setMessage] = useState('');
 
+    console.log('conversation messages', messages)
+
     const handleSendOnClick = () => {
+        console.log('conversation message',)
         handleSendMessage(message);
         setMessage('');
     };
@@ -34,8 +37,8 @@ function Conversation({ messages, recipient, username, handleLeave, handleSendMe
         <h2>{username}'s Conversation With {recipient.username}</h2>
         <input type="text" value={message} onChange={handleOnChange} />
         <button type="button" onClick={handleSendOnClick}>Send</button>
-        {messages.map(message => (
-            <p key={message.id}>({message.created.toLocaleTimeString()}){message.username}: <strong>{message.message}</strong></p>)
+        {messages.map(message =>  (
+            <p key={message.id}><strong>{message.User.username}</strong>: {message.content}</p>)
             )}
      </>
     )
