@@ -24,12 +24,11 @@ router.get('/', asyncHandler(async (req, res) => {
        const fetchPlayerLists = await PlayerList.findAll({
          where: { playerId: userId },
          include: { model: Table,
-            include: {
+            include: [User, {
             model: PlayerList, where: {
                 tableId: {[Op.col]: 'Table.id'},
-            },
-            include: [User]
-        }
+            }, include: [User]
+        }]
     }
 });
        return res.json(fetchPlayerLists);

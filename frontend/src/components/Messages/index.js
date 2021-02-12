@@ -37,7 +37,6 @@ function Messages() {
   useEffect(() => {
       if (playerLists !== undefined) {
           if (playerLists.length > 0) {
-              console.log('playerlists length')
               console.log(playerLists)
 
               const players = playerLists.map(list => list.Table.PlayerLists);
@@ -48,11 +47,14 @@ function Messages() {
 
               //filter current player out of contact list
               const filteredList = joinedPlayerList.filter( item => item.playerId !== sessionUser.id )
-              console.log('FILTERED', filteredList);
+              const hosts = playerLists.map(list => list.Table);
+              filteredList.concat(hosts);
 
               const deDupe = filteredList.filter((v,index,a)=>a.findIndex(t=>( t.playerId === v.playerId ))===index)
-              console.log('DEDUPE', deDupe);
 
+
+              console.log('PLAYERS', deDupe)
+              console.log('HOSTS', hosts);
 
               setRecipientList([...deDupe]);
             }
@@ -107,7 +109,6 @@ function Messages() {
           console.log('username', message.username);
             if ((message.recipient === username) || (message.username === username)) {
                 setMessages([message, ...messages]);
-                console.log(messages);
             }
         }
     }
@@ -130,6 +131,7 @@ function Messages() {
     });
 
     console.log(`Sending message ${jsonNewMessage}...`);
+    console.log(webSocket.current);
     webSocket.current.send(jsonNewMessage);
 };
 
@@ -160,11 +162,18 @@ const handleLeave = () => {
         <>
         <div>
             <h2>Contacts</h2>
+            {/* {hosts.map(host => <div onClick={() =>setRecipient(host)}>{host.username}</div>)} */}
             {recipientList.map(recipient => <div onClick={() =>setRecipient(recipient.User)}>{recipient.User.username}</div>)}
         </div>
+        {/* {recipientList.map(recipient => {console.log(recipient)})} */}
         <div>
-            {recipient && (<div><Conversation username={username} recipient={recipient} messages={messages} handleSendMessage={handleSendMessage} handleOnChange={handleOnChange} /></div>)}
+            {recipient && (<div><Conversation username={username}
+            recipient={recipient}
+            messages={messages.filter(message => message.recipient === recipient.username)}
+            handleSendMessage={handleSendMessage}
+            handleOnChange={handleOnChange} /></div>)}
         </div>
+        {console.log(messages)}
      </>
     )
 }
