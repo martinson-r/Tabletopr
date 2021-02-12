@@ -17,32 +17,34 @@ function TableDetail() {
 
 useEffect(() => {
     setApplicationStatus(false);
-    if (table.hostId === sessionUser.id) {
-        setApplicationStatus([true, "You are currently hosting this game."])
-    }
-    if (table.Applications) {
-            const matchingApp = table.Applications.filter(application => application.userId === sessionUser.id);
-            console.log('MATCHING APP', matchingApp);
-            if (matchingApp.length) {
-                if (matchingApp[0].denied) {
-                    setApplicationStatus([true, "Your application has been denied."])
-                } else if (matchingApp[0].approved) {
-                    setApplicationStatus([true, "Your application has been approved"])
-                } else {
-                    console.log('neither true nor false');
-                    setApplicationStatus([true, "Your application is still being reviewed."])
+    if (sessionUser !== undefined ) {
+        if (table.hostId === sessionUser.id) {
+            setApplicationStatus([true, "You are currently hosting this game."])
+        }
+        if (table.Applications) {
+                const matchingApp = table.Applications.filter(application => application.userId === sessionUser.id);
+                console.log('MATCHING APP', matchingApp);
+                if (matchingApp.length) {
+                    if (matchingApp[0].denied) {
+                        setApplicationStatus([true, "Your application has been denied."])
+                    } else if (matchingApp[0].approved) {
+                        setApplicationStatus([true, "Your application has been approved"])
+                    } else {
+                        console.log('neither true nor false');
+                        setApplicationStatus([true, "Your application is still being reviewed."])
+                    }
                 }
             }
-        }
-    if (table.Player) {
-        const isPlaying = table.Player.filter(player => player.userId === sessionUser.id);
-        if (isPlaying.length) {
-            setApplicationStatus([true, "You are currently playing in this game."]);
+        if (table.Player) {
+            const isPlaying = table.Player.filter(player => player.userId === sessionUser.id);
+            if (isPlaying.length) {
+                setApplicationStatus([true, "You are currently playing in this game."]);
+            }
         }
     }
 }, [table.id])
 
-      if (!table.tableName || !table.Applications) {
+      if (!table.tableName) {
           return null;
       }
 

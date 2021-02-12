@@ -11,30 +11,27 @@ function Navigation({ isLoaded }){
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <>
+      <navigation>
       <NavLink to="/">Browse Tables</NavLink>
       <NavLink to="/tables/create">Host a Table</NavLink>
       <NavLink to={`/tables/players/${sessionUser.id}`}>My Tables</NavLink>
-      <ProfileButton user={sessionUser} />
-      </>
+      {/* <ProfileButton user={sessionUser} /> */}
+      </navigation>
     );
   } else {
     sessionLinks = (
-      <>
+      <navigation>
         <NavLink to="/">Browse Tables</NavLink>
         <NavLink to="/tables/create">Host a Table</NavLink>
-        <LoginFormModal />
-        <NavLink to="/signup">Sign Up</NavLink>
-      </>
+        {/* <LoginFormModal /> */}
+      </navigation>
     );
   }
 
   return (
-    <ul>
-      <li>
+   <>
         {isLoaded && sessionLinks}
-      </li>
-    </ul>
+   </>
   );
 }
 

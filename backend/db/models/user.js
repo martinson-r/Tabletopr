@@ -53,7 +53,8 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Table, { foreignKey: "hostId", });
     User.hasMany(models.TableReview, { foreignKey: "userId", });
     User.hasMany(models.Application, { foreignKey: "userId", });
-    User.belongsToMany(models.Table, { through: "PlayerList", foreignKey: "playerId", otherKey: "tableId", onDelete: 'cascade', hooks:true});
+    User.hasMany(models.Message, { foreignKey: "userId" });
+    User.hasMany(models.Message, { as: "Recipient", foreignKey: "recipientId" });
   };
   User.prototype.toSafeObject = function () {
     // remember, this cannot be an arrow function

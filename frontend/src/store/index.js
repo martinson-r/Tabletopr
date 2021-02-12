@@ -2,10 +2,12 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import session from './session'
 import tables from './tables'
+import messages from './messages'
 
 const rootReducer = combineReducers({
   session,
-  tables
+  tables,
+  messages,
 });
 
 let enhancer;

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch, NavLink } from "react-router-dom";
 import SignupFormPage from "./components/SignupFormPage";
 import LoginFormPage from "./components/LoginFormPage";
+import LoginFormModal from "./components/LoginFormModal";
 import Home from "./components/Home";
 import TableDetail from "./components/TableDetail";
-// import LoginFormPage from "./components/LoginFormPage";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import SimpleSearch from "./components/SimpleSearch";
@@ -15,17 +15,29 @@ import GameSubmissionForm from "./components/GameSubmissionForm";
 import MyTables from "./components/MyTables";
 import Applications from "./components/Applications";
 import ApplicationDetail from "./components/ApplicationDetail";
+import Messages from "./components/Messages";
+import ProfileButton from "./components/Navigation/ProfileButton";
 
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
+  const sessionUser = useSelector(state => state.session.user);
+
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
 
+  const logout = (e) => {
+    e.preventDefault();
+    dispatch(sessionActions.logout());
+  };
+
   return (
     <>
-      <h1><NavLink exact to="/">Tabletopr</NavLink></h1>
+      {!sessionUser&&<NavLink to="/signup">Sign Up</NavLink>}
+      {!sessionUser&&<LoginFormModal />}
+      {sessionUser&&(<div onClick={logout}>Log Out</div>)}
+      <h1 className="header"><NavLink exact to="/">Tabletopr</NavLink></h1>
       <Navigation isLoaded={isLoaded} />
       <SimpleSearch />
       {isLoaded && (
@@ -38,6 +50,9 @@ function App() {
           </Route>
           <Route path="/results">
             <SearchResults />
+          </Route>
+          <Route path="/messages">
+            <Messages />
           </Route>
           <Route path="/tables/:tableId/apply" exact={true}>
             <GameApplicationForm />

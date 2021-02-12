@@ -17,6 +17,24 @@ router.get('/', asyncHandler(async (req, res) => {
     return res.json(fetchTables);
  }));
 
+ router.get('/playerlists', restoreUser, asyncHandler(async (req, res) => {
+   const { user } = req;
+   if (user !== undefined) {
+       const userId = user.id;
+       const fetchPlayerLists = await PlayerList.findAll({
+         where: { playerId: userId },
+         include: { model: Table,
+            include: [User, {
+            model: PlayerList, where: {
+                tableId: {[Op.col]: 'Table.id'},
+            }, include: [User]
+        }]
+    }
+});
+       return res.json(fetchPlayerLists);
+   }
+}));
+
  router.get('/:tableId', restoreUser, asyncHandler(async (req, res) => {
     const id = req.params.tableId;
     const { user } = req;
@@ -36,6 +54,7 @@ router.get('/', asyncHandler(async (req, res) => {
     })
     return res.json(fetchSingleTable);
  }));
+
 
  router.get('/players/:playerId', restoreUser, asyncHandler(async (req, res) => {
     const { user } = req;
