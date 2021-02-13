@@ -211,7 +211,7 @@ const handleLeave = () => {
       }
 
     return (
-        <>
+        <div className="container">
         <div>
             <h2>Contacts</h2>
             {/* {hosts.map(host => <div onClick={() =>setRecipient(host)}>{host.username}</div>)} */}
@@ -226,7 +226,7 @@ const handleLeave = () => {
             handleSendMessage={handleSendMessage}
             handleOnChange={handleOnChange} /></div>)}
         </div>
-     </>
+     </div>
     )
 }
 

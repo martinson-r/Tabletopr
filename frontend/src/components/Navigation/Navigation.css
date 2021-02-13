@@ -5,13 +5,14 @@ navigation {
   justify-content: space-around;
   font-size: 30px;
   font-family: 'Roboto Slab', serif;
-  background-color: gray;
+  background-color: #494430;
   margin: 0px;
   color: white;
+  padding: 5px;
 }
 
 navigation a {
-  color: white;
+  color: #b5b5b5;
 }
 
 li {

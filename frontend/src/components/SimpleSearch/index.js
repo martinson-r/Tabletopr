@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import {searchTables} from "../../store/tables";
 import { useSelector, useDispatch } from "react-redux";
 import {  useHistory } from "react-router-dom";
+import "./SimpleSearch.css"
 // import search from "../../media/search.svg";
 
 const SimpleSearch = () => {
@@ -26,7 +27,7 @@ const SimpleSearch = () => {
       <form onSubmit={submitForm}>
         <div className="search-bar-container">
         <input type="text" value={query} onChange={updateQuery} required></input>
-          <button className="search-button">Search</button>
+          <button className="search-button"><i class="fas fa-search"></i></button>
         </div>
       </form>
     </div>

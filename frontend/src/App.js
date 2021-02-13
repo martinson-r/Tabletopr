@@ -33,10 +33,11 @@ function App() {
 
   return (
     <>
-      {!sessionUser&&<NavLink to="/signup">Sign Up</NavLink>}
-      {!sessionUser&&<LoginFormModal />}
-      {sessionUser&&(<div onClick={logout}>Log Out</div>)}
-      <SimpleSearch />
+      <div class="signup-login">
+        {!sessionUser&&<div className="signup-login"><NavLink to="/signup">Sign Up</NavLink><LoginFormModal /></div>}
+        {/* {!sessionUser&&<LoginFormModal />} */}
+        {sessionUser&&(<div onClick={logout}>Log Out</div>)}
+      </div>
       <h1 className="header"><NavLink exact to="/">Tabletopr</NavLink></h1>
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (

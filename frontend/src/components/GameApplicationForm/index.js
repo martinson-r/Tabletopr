@@ -33,9 +33,9 @@ const GameApplicationForm = () => {
   };
 
   return (
-    <div className="location">
+    <div className="container">
       <form onSubmit={submitForm}>
-        <div className="search-bar-container">
+        <div>
             <label htmlFor="playStyle">Describe your play style:</label>
             <input type="text" name="playStyle" value={playStyle} onChange={updatePlayStyle} required></input>
             <label htmlFor="characterConcept">Describe your character concept for this game:</label>

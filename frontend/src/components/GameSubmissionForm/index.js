@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import './Search.css';
-import {searchTables} from "../../store/tables";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import {  useHistory, useParams } from "react-router-dom";
 import { submitTable } from "../../store/tables";
 
@@ -43,9 +41,9 @@ const GameSubmissionForm = () => {
   };
 
   return (
-    <div className="game-submission-form">
+    <div className="container">
       <form onSubmit={submitForm}>
-        <div className="search-bar-container">
+        <div>
             <label htmlFor="tableName">What is the title of your game?</label>
             <input type="text" name="tableName" value={tableName} onChange={updateTableName} required></input>
             <label htmlFor="description">Describe the game you plan on running:</label>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import SimpleSearch from "../SimpleSearch";
 import ProfileButton from './ProfileButton';
 import LoginFormModal from '../LoginFormModal';
 import './Navigation.css';
@@ -16,6 +17,7 @@ function Navigation({ isLoaded }){
       <NavLink to="/tables/create">Host a Table</NavLink>
       <NavLink to={`/tables/players/${sessionUser.id}`}>My Tables</NavLink>
       <NavLink to={`/messages`}>My Messages</NavLink>
+      <SimpleSearch />
       {/* <ProfileButton user={sessionUser} /> */}
       </navigation>
     );
@@ -23,7 +25,7 @@ function Navigation({ isLoaded }){
     sessionLinks = (
       <navigation>
         <NavLink to="/">Browse Tables</NavLink>
-        <NavLink to="/tables/create">Host a Table</NavLink>
+        {sessionUser && <NavLink to="/tables/create">Host a Table</NavLink>}
         {/* <LoginFormModal /> */}
       </navigation>
     );

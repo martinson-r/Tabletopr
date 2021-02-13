@@ -1,15 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Roboto+Slab&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
+html {
+    height: 100%
+  }
+
 body {
-    background-color: #f4f0e6;
     font-family: 'Roboto', sans-serif;
     box-sizing: border-box;
-    padding: 20px;
     margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+#root {
+    background-color: #000000;
+    background-image: url('media/fantasy.png');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 a {
     text-decoration: none;
+    color: #540804;
 }
 
 h1 {
@@ -19,10 +31,37 @@ h1 {
 }
 
 h1 a {
-    color: black;
+    color: #b5b5b5;
+}
+
+input {
+    border-radius: 6px;
+    padding: 5px;
 }
 
 .header {
     margin: 0 auto;
     text-align: center;
+}
+
+.container {
+    background-color:rgba(0,0,0,0.8);
+    height: 100vh;
+    color: #b5b5b5;
+    padding: 35px;
+    margin: 0;
+    overflow: auto;
+}
+
+.signup-login {
+    width: 150px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px 0 0 20px;
+    color: #b5b5b5;
+}
+
+.signup-login a {
+    color: #b5b5b5;
 }

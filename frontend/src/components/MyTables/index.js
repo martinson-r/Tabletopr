@@ -35,14 +35,14 @@ function MyTables() {
       }
 
     return (
-        <>
+        <div className="container">
         <h2>Tables I'm Hosting:</h2>
         {!hostedTables[0] && ( <p>It looks like you aren't hosting any tables. Maybe you should think about starting a game!</p>)}
             {hostedTables[0] && (hostedTables.map(table =>(<p><Link to={`/tables/${table.id}`}>{table.GameSystem.gameSystem}: {table.tableName}</Link> - <Link to={`/tables/${table.id}/applications`}>View Applications ({table.Applications.length})</Link> </p>)))}
         <h2>Tables I'm Playing In:</h2>
         <div>{playingTables.map(table =>(<Link to={`/tables/${table.id}`}>
                 {<p>{table.GameSystem.gameSystem}: {table.tableName}</p>}</Link>))}</div>
-     </>
+     </div>
     )
 }
 

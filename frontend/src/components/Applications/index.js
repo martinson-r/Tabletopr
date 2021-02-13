@@ -21,10 +21,10 @@ function Home() {
     }
 
     return (
-        <>
+        <div className="container">
         <p>Current applications for <b>{table.tableName}</b>:</p>
         {applications.map(application => <div><p>{application.User.username} - <Link to={`/tables/${tableId}/${application.User.id}/application`}>View Application</Link></p></div>)}
-     </>
+        </div>
     )
 }
 

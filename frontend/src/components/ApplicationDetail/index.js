@@ -62,7 +62,7 @@ function ApplicationDetail() {
 
 
     return (
-        <>
+        <div className="container">
        <h2>{currentApplication[0].User.username}'s Application</h2>
        <p>Why Join?</p>
        <p>{currentApplication[0].whyJoin}</p>
@@ -81,7 +81,7 @@ function ApplicationDetail() {
         <button onClick={handleDeny}>Deny</button>
         </>
        )}
-     </>
+     </div>
     )
 }
 
