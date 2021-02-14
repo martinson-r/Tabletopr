@@ -74,7 +74,8 @@ function Messages() {
       return;
     }
 
-    const ws = new WebSocket(process.env.REACT_APP_WS_URL);
+    var host = location.origin.replace(/^http/, 'ws')
+    const ws = new WebSocket(host);
 
     ws.onopen = (event) => {
 
