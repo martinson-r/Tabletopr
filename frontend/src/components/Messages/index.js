@@ -76,7 +76,7 @@ function Messages() {
 
     // let host = location.origin.replace(/^http/, 'ws')
     // const ws = new WebSocket(host);
-    const ws = new WebSocket(process.env.REACT_APP_WS_URL);
+    const ws = new WebSocket('ws://tabletopr-groupfinder.herokuapp.com');
 
     ws.onopen = (event) => {
 
