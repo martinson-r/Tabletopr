@@ -8,7 +8,8 @@ navigation {
   background-color: #494430;
   margin: 0px;
   color: white;
-  padding: 5px;
+  padding: 40px 0 15px 0;
+  align-items: flex-end;
 }
 
 navigation a {
@@ -21,8 +22,50 @@ li {
 
 .profile-dropdown {
   position: absolute;
+  top: 7%;
+  right: 8%;
+  background-color: White;
+  color: black;
+  padding: 20px;
+  border-radius: 6px;
 }
 
 .logoutModal {
   background-color: white;
+}
+
+.fa-envelope {
+  color: #b5b5b5;
+  padding-right: 10px;
+}
+
+.search-messages {
+  display: flex;
+  flex-direction: row;
+  width: 120px;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.fa-user {
+  color: #b5b5b5;
+}
+
+.my-tables {
+  color: #a23a35;
+}
+
+p {
+  padding-top: 10px;
+  margin-top: 0;
+}
+
+.logout-button {
+  display: block;
+}
+
+.border-bottom {
+  padding-top: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #b5b5b5;
 }

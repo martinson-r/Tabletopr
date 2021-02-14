@@ -1,0 +1,35 @@
+textarea {
+    width: 100%;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+input, select {
+    padding: 10px;
+    margin-right: 20px;
+}
+
+button {
+    padding: 10px 15px 10px 15px;
+}
+
+label {
+    padding-right: 20px;
+}
+
+.radio-buttons-flex {
+    display: flex;
+}
+
+.radio-buttons {
+    display: flex;
+    padding-right: 25px;
+}
+
+.yesno {
+    padding: 0;
+}
+
+.question {
+    padding-bottom: 15px;
+}

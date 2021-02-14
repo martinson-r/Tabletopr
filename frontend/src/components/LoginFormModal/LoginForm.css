@@ -5,3 +5,7 @@
 .login-form--body {
     padding: 35px;
 }
+
+.login {
+    display: inline;
+}

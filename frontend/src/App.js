@@ -16,6 +16,7 @@ import MyTables from "./components/MyTables";
 import Applications from "./components/Applications";
 import ApplicationDetail from "./components/ApplicationDetail";
 import Messages from "./components/Messages";
+import SubmissionThanks from "./components/SubmissionThanks";
 
 function App() {
   const dispatch = useDispatch();
@@ -33,12 +34,11 @@ function App() {
 
   return (
     <>
-      <div class="signup-login">
+      <div>
         {!sessionUser&&<div className="signup-login"><NavLink to="/signup">Sign Up</NavLink><LoginFormModal /></div>}
         {/* {!sessionUser&&<LoginFormModal />} */}
-        {sessionUser&&(<div onClick={logout}>Log Out</div>)}
+        {/* {sessionUser&&(<div className="logout" onClick={logout}>Log Out</div>)} */}
       </div>
-      <h1 className="header"><NavLink exact to="/">Tabletopr</NavLink></h1>
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
@@ -74,6 +74,9 @@ function App() {
           </Route>
           <Route path="/messages">
             <Messages />
+          </Route>
+          <Route path="/thanks">
+            <SubmissionThanks />
           </Route>
           <Route path="/" exact={true}>
             <Home />

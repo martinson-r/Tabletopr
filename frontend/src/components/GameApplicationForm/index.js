@@ -38,7 +38,7 @@ const GameApplicationForm = () => {
         <div>
             <label htmlFor="playStyle">Describe your play style:</label>
             <input type="text" name="playStyle" value={playStyle} onChange={updatePlayStyle} required></input>
-            <label htmlFor="characterConcept">Describe your character concept for this game:</label>
+            <label className="question" htmlFor="characterConcept">Describe your character concept for this game:</label>
             <input type="text" name="characterConcept" value={characterConcept} onChange={updateCharacterConcept} required></input>
             <label htmlFor="experience">Describe your experience playing tabletop games:</label>
             <input type="text" name="experience" value={experience} onChange={updateExperience} required></input>

@@ -23,11 +23,11 @@ const SimpleSearch = () => {
   };
 
   return (
-    <div className="location">
+    <div className="search-modal">
       <form onSubmit={submitForm}>
         <div className="search-bar-container">
         <input type="text" value={query} onChange={updateQuery} required></input>
-          <button className="search-button"><i class="fas fa-search"></i></button>
+          <button className="search-button">Search</button>
         </div>
       </form>
     </div>
