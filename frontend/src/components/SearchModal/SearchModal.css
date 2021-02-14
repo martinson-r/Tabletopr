@@ -1,0 +1,9 @@
+.fa-search {
+    color: #b5b5b5;
+}
+
+#search-modal-position {
+    position: fixed;
+    right: 0;
+    top: 0;
+}

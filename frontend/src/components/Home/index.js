@@ -15,7 +15,7 @@ function Home() {
       }, [dispatch]);
 
     return (
-        <>
+        <div className="container">
         <p>Newest Tables:</p>
             <div className="card-container">
             {tables.map(table =>(<Link to={`/tables/${table.id}`}>
@@ -23,7 +23,7 @@ function Home() {
                 <br />{table.tableName}</p><p>Hosted by:<br />{table.User.username}</p>
                 </div>}</Link>))}
             </div>
-     </>
+     </div>
     )
 }
 

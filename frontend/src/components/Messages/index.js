@@ -34,11 +34,13 @@ function Messages() {
     useEffect(() => {
         if (sessionUser) {
         setUsername(sessionUser.username);
-        }
         dispatch(getFellowPlayers());
         dispatch(loadUserMessages(sessionUser.id));
-
-  }, [])
+        }
+        if (sessionUser === undefined) {
+            setMessages([]);
+        }
+  }, [dispatch, sessionUser])
 
   useEffect(() => {
       if (playerLists !== undefined) {
@@ -129,7 +131,7 @@ function Messages() {
         console.log('Message structure', message)
         }
     }
-}, [messages])
+}, [messages, sessionUser])
 
 
 
@@ -183,7 +185,6 @@ const handleLeave = () => {
 
     const handleOnChange = (e) => {
         setMessage(e.target.value);
-        console.log('Message', message)
     }
 
     const handleLeaveOnClick = () => {
@@ -192,20 +193,24 @@ const handleLeave = () => {
 
     useEffect(() => {
         dispatch(getAllTables());
-        console.log("Got all tables");
+        if (sessionUser) {
+            const getMessages = async() => {
+                const data = await fetch('/api/messages');
+                const messages = await data.json();
+            }
 
-        const getMessages = async() => {
-            const data = await fetch('/api/messages');
-            const messages = await data.json();
-            console.log('MESSAGES', messages);
+            getMessages();
         }
+      }, [dispatch, sessionUser]);
 
-        getMessages();
-
-      }, [dispatch]);
+      if ( recipientList.length === 0 ) {
+          return (
+              <div className="container"><p>You can't message anyone until you join a game. Join some games, and then you will be able to message your fellow players!</p></div>
+          )
+      }
 
     return (
-        <>
+        <div className="container">
         <div>
             <h2>Contacts</h2>
             {/* {hosts.map(host => <div onClick={() =>setRecipient(host)}>{host.username}</div>)} */}
@@ -220,7 +225,7 @@ const handleLeave = () => {
             handleSendMessage={handleSendMessage}
             handleOnChange={handleOnChange} /></div>)}
         </div>
-     </>
+     </div>
     )
 }
 

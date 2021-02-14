@@ -20,7 +20,7 @@ function SearchResults() {
 
     return (
         <>
-       {tables.map(table =>(<div>{<p><Link to={`/tables/${table.id}`}><b>{table.GameSystem.gameSystem}: {table.tableName}</b></Link>, Hosted by: {table.User.username}</p>}</div>))}
+        <div className="container"> {tables.map(table =>(<div>{<p><Link to={`/tables/${table.id}`}><b>{table.GameSystem.gameSystem}: {table.tableName}</b></Link>, Hosted by: {table.User.username}</p>}</div>))}</div>
         </>
     )
 }

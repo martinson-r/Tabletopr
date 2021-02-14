@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getSingleTable } from "../../store/tables";
+import "./TableDetail.css";
 
 function TableDetail() {
     const { tableId } = useParams();
@@ -52,7 +53,7 @@ useEffect(() => {
       }
 
     return (
-        <>
+        <div className="container">
         <h2>{table.tableName}</h2>
         <p>Hosted by: {table.User.username}</p>
         <h3>{table.GameSystem.gameSystem}</h3>
@@ -65,7 +66,7 @@ useEffect(() => {
         <h3>Reviews:</h3>
         {!table.TableReviews.length && (<p>There are no reviews for this table, yet.</p>)}
         {table.TableReviews && (table.TableReviews.map(review => (<div><p><b>{review.User.username}:</b></p><p>{review.content}</p></div>)))}
-        </>
+        </div>
     )
 }
 

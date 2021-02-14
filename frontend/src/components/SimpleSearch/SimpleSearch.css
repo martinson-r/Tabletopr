@@ -1,0 +1,12 @@
+.search-button {
+    color: #b5b5b5;
+    border: 0;
+    background: rgba(0,0,0,0);
+    font-size: 18px;
+}
+
+.search-modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 6px;
+}

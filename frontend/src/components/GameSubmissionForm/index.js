@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-// import './Search.css';
-import {searchTables} from "../../store/tables";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import {  useHistory, useParams } from "react-router-dom";
 import { submitTable } from "../../store/tables";
+import './GameSubmissionForm.css';
 
 const GameSubmissionForm = () => {
   const dispatch = useDispatch();
@@ -38,37 +37,47 @@ const GameSubmissionForm = () => {
 
     dispatch(submitTable(payload));
     console.log('submit table dispatched. Payload: ', payload);
-    //ref HeadCanon to see how to send them to the table they created
-    // history.push(`/tables/${tableId}`)
+    history.push('/thanks');
   };
 
   return (
-    <div className="game-submission-form">
+    <div className="container">
       <form onSubmit={submitForm}>
-        <div className="search-bar-container">
-            <label htmlFor="tableName">What is the title of your game?</label>
-            <input type="text" name="tableName" value={tableName} onChange={updateTableName} required></input>
+        <div>
+            <div className="question" >
+                <label htmlFor="tableName">What is the title of your game?</label>
+                <input type="text" name="tableName" value={tableName} onChange={updateTableName} required></input>
+            </div>
+            <div className="question">
             <label htmlFor="description">Describe the game you plan on running:</label>
-            <input type="text" name="description" value={description} onChange={updateDescription} required></input>
+            </div>
+            <div className="question">
+                <textarea rows="20" cols="100" name="description" value={description} onChange={updateDescription} required></textarea>
+            </div>
             <p>Is this a virtual game (Zoom, Discord, etc)?</p>
-            <label htmlFor="isVirtualYes">Yes</label>
-            <div className="radio"> <input type="radio" name="isVirtualYes" value={true} checked={isVirtual === true}  onClick={() => setIsVirtual(true)} ></input></div>
-            <label htmlFor="isVirtualNo">No</label>
-            <div className="radio"> <input type="radio" name="isVirtual" value={false} checked={isVirtual === false} onClick={() => setIsVirtual(false)} ></input></div>
+            <div className="radio-buttons-flex question">
+                <label htmlFor="isVirtualYes" className="yesno">Yes</label>
+                <div className="radio radio-buttons"> <input type="radio" name="isVirtualYes" value={true} checked={isVirtual === true}  onClick={() => setIsVirtual(true)} ></input></div>
+                <label htmlFor="isVirtualNo" className="yesno">No</label>
+                <div className="radio radio-buttons"> <input type="radio" name="isVirtual" value={false} checked={isVirtual === false} onClick={() => setIsVirtual(false)} ></input></div>
+            </div>
+        <div className="question" >
             <label>
-          What type of game are you running?
-          </label>
-          <select value={gameTypeId} onChange={updateGameTypeId}>
-            <option value={1}>Play by Post</option>
-            <option value={2}>Physical Table</option>
-            <option value={3}>Zoom</option>
-            <option value={4}>LARP</option>
-            <option value={5}>Discord</option>
-            <option value={6}>Roll20</option>
-            <option value={7}>Ventrilo</option>
-            <option value={8}>Other (VOIP)</option>
-          </select>
+            What type of game are you running?
+            </label>
+            <select value={gameTypeId} onChange={updateGameTypeId}>
+                <option value={1}>Play by Post</option>
+                <option value={2}>Physical Table</option>
+                <option value={3}>Zoom</option>
+                <option value={4}>LARP</option>
+                <option value={5}>Discord</option>
+                <option value={6}>Roll20</option>
+                <option value={7}>Ventrilo</option>
+                <option value={8}>Other (VOIP)</option>
+            </select>
+          </div>
 
+        <div className="question" >
         <label>What game system do you plan on using? Please state the specific edition in your game description.</label>
           <select value={gameSystemId} onChange={updateGameSystemId}>
             <option value={1}>Dungeons &amp; Dragons</option>
@@ -106,6 +115,8 @@ const GameSubmissionForm = () => {
             <option value={33}>Freeform</option>
             <option value={34}>Miscellaneous/Other</option>
           </select>
+        </div>
+        <div className="question" >
           What type of game are you running?
           <label>What language will the game primarily be run in?</label>
           <select value={languageId} onChange={updateLanguageId}>
@@ -125,10 +136,13 @@ const GameSubmissionForm = () => {
             <option value={15}>Marathi</option>
             <option value={16}>Other</option>
           </select>
+        </div>
+        <div className="question" >
           <label htmlFor="maxPlayers">How many players will you accept?</label>
             <input type="number" name="maxPlayers" value={maxPlayers} onChange={updateMaxPlayers} required></input>
           <button type="submit">Submit</button>
         </div>
+    </div>
       </form>
     </div>
   );

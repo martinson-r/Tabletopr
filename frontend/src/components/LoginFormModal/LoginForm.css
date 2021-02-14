@@ -1,3 +1,11 @@
 .loginModal {
     background-color: white;
 }
+
+.login-form--body {
+    padding: 35px;
+}
+
+.login {
+    display: inline;
+}
