@@ -29,7 +29,7 @@ function Navigation({ isLoaded }){
       <navigation>
         <h1 className="header"><i class="fas fa-dice-d20"></i><NavLink exact to="/">Tabletopr</NavLink></h1>
         <NavLink to="/">Find a Game</NavLink>
-        {/* <LoginFormModal /> */}
+        <SearchModal />
       </navigation>
     );
   }
