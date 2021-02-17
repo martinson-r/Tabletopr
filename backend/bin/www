@@ -21,6 +21,7 @@ console.log('WS CONSOLE LOG', ws);
 // };
 
 ws.on('connection', (ws, request, client) => {
+  console.log(`Processing incoming message from client ${client}`);
   console.log('WS CONNECTED');
   ws.on('message', (jsonData) => {
     console.log('MESSAGE SENT');

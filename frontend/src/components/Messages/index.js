@@ -76,7 +76,8 @@ function Messages() {
 
     // let host = location.origin.replace(/^http/, 'ws')
     // const ws = new WebSocket(host);
-    const ws = new WebSocket('wss://tabletopr-groupfinder.herokuapp.com');
+    // const ws = new WebSocket('wss://tabletopr-groupfinder.herokuapp.com');
+    const ws = new WebSocket('ws://localhost:5000');
 
     ws.onopen = (event) => {
 
@@ -139,6 +140,7 @@ function Messages() {
 
   const handleSendMessage = (message) => {
     const newMessage = {
+      id: sessionUser.id,
       uuid: uuid(),
       username,
       Recipient: recipient,
