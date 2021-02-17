@@ -20,7 +20,7 @@ console.log('WS CONSOLE LOG', ws);
 //   return s4() + s4() + '-' + s4();
 // };
 
-ws.on('connection', (ws, request, clients) => {
+ws.on('connection', (ws, request, client) => {
   console.log('WS CONNECTED');
   ws.on('message', (jsonData) => {
     console.log('MESSAGE SENT');
