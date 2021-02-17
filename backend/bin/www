@@ -10,23 +10,18 @@ const server = createServer(app);
 
 const ws = new WebSocket.Server({ server });
 
-console.log('WS CONSOLE LOG', ws);
-
-// I'm maintaining all active connections in this object
-// const clients = {};
-
-// const getUniqueID = () => {
-//   const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-//   return s4() + s4() + '-' + s4();
-// };
+console.log('ws', ws)
 
 ws.on('connection', (ws, request, client) => {
-  console.log(`Processing incoming message from client ${client}`);
-  console.log('WS CONNECTED');
+  console.log('ws now', ws)
   ws.on('message', (jsonData) => {
-    console.log('MESSAGE SENT');
+    console.log(jsonData);
+    console.log('client', client)
+    console.log(`Processing incoming message from client**** ${client}`);
     const message = JSON.parse(jsonData);
     const chatMessage = message.data;
+
+    console.log('chatMessage', chatMessage);
 
     const addChatMessage = {
       type: 'add-chat-message',
@@ -34,16 +29,13 @@ ws.on('connection', (ws, request, client) => {
     };
 
     const jsonAddChatMessage = JSON.stringify(addChatMessage);
-    console.log(`Sending message**** ${jsonAddChatMessage}`);
-
-    console.log('Clients****', ws.clients)
+    console.log(`Sending message ${jsonAddChatMessage}`);
 
     ws.clients.forEach((client) => {
       //Ready states include:
       //CONNECTING, OPEN, CLOSING, CLOSED
-      console.log('client ready state ', client.readyState, 'client id', client);
-      console.log('client**** ', client);
-      console.log('CLIENT RECIPIENT ', client.username);
+      console.log('client ready state', client.readyState);
+      console.log('CLIENT RECIPIENT', client.username)
       if (client.readyState === WebSocket.OPEN) {
         console.log('message sent:', jsonAddChatMessage);
         client.send(jsonAddChatMessage);
