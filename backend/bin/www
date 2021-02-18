@@ -4,47 +4,18 @@ const { port } = require('../config');
 const { createServer } = require('http');
 const app = require('../app');
 const db = require('../db/models');
-const WebSocket = require('ws');
 
-const server = createServer(app);
+const server = require('http').createServer(app);
+const io = require('socket.io')(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
 
-const ws = new WebSocket.Server({ server });
-
-console.log('ws', ws)
-
-ws.on('connection', (ws, request, client) => {
-  console.log('ws now', ws)
-  ws.on('message', (jsonData) => {
-    console.log(jsonData);
-    console.log('client', client)
-    console.log(`Processing incoming message from client**** ${client}`);
-    const message = JSON.parse(jsonData);
-    const chatMessage = message.data;
-
-    console.log('chatMessage', chatMessage);
-
-    const addChatMessage = {
-      type: 'add-chat-message',
-      data: chatMessage,
-    };
-
-    const jsonAddChatMessage = JSON.stringify(addChatMessage);
-    console.log(`Sending message ${jsonAddChatMessage}`);
-
-    ws.clients.forEach((client) => {
-      //Ready states include:
-      //CONNECTING, OPEN, CLOSING, CLOSED
-      console.log('client ready state', client.readyState);
-      console.log('CLIENT RECIPIENT', client.username)
-      if (client.readyState === WebSocket.OPEN) {
-        console.log('message sent:', jsonAddChatMessage);
-        client.send(jsonAddChatMessage);
-      }
-    });
-  });
-  ws.on('close', (event) => {
-    console.log(event);
-  })
+io.on('connection', function (socket) {
+  console.log("Socket connected :"+socket.id);
+socket.emit('news', { hello: 'world' });
 });
 
 // Check the database connection before starting the app

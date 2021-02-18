@@ -8,6 +8,8 @@ import { loadUserMessages } from "../../store/messages";
 import Conversation from "../Conversation";
 import { v4 as uuid } from 'uuid';
 import Cookies from 'js-cookie';
+import { io } from 'socket.io-client';
+const socketUrl = "http://localhost:5000";
 
 function Messages() {
 
@@ -22,7 +24,13 @@ function Messages() {
     const [username, setUsername] = useState('');
     const [recipient, setRecipient] = useState('');
 
-    const webSocket = useRef(null);
+    const initSocket = () => {
+        const socket = io(socketUrl);
+        socket.on('connect', () => {
+            console.log('connected');
+        })
+    }
+
 
     useEffect(() => {
         console.log('Recipient....', recipient)
@@ -32,7 +40,9 @@ function Messages() {
     const sessionUser = useSelector((state) => state.session.user);
 
     useEffect(() => {
+
         if (sessionUser) {
+        initSocket();
         setUsername(sessionUser.username);
         dispatch(getFellowPlayers());
         dispatch(loadUserMessages(sessionUser.id));
@@ -74,66 +84,37 @@ function Messages() {
       return;
     }
 
-    // let host = location.origin.replace(/^http/, 'ws')
-    // const ws = new WebSocket(host);
-    // const ws = new WebSocket('wss://tabletopr-groupfinder.herokuapp.com');
-    const ws = new WebSocket('ws://localhost:5000');
+    // socket.on('connect', function(){
+    //     const getOldMessages = async() => {
+    //         const data = await fetch(`/api/messages/${sessionUser.id}`);
+    //         if (data.ok) {
+    //             const oldMessages = await data.json();
+    //             setMessages([...oldMessages]);
+    //             console.log('OLD MESSAGES', oldMessages);
+    //             console.log('MESSAGES AFTER SET', messages)
+    //         }
+    //     }
+    //     getOldMessages();
+    // });
 
-    ws.onopen = (event) => {
+    // },[username]);
 
-      console.log(`Connection open: ${event}`);
+//   useEffect(() => {
+//     console.log('useeffect triggered');
+//     if (webSocket.current !== null) {
+//         console.log('NOT NULL', webSocket.current);
+//           webSocket.current.onmessage = (event) => {
+//           const chatMessage = JSON.parse(event.data);
+//           const message = chatMessage.data;
 
-      //set messages to trigger other useEffect
-
-      const getOldMessages = async() => {
-        const data = await fetch(`/api/messages/${sessionUser.id}`);
-        if (data.ok) {
-            const oldMessages = await data.json();
-            setMessages([...oldMessages]);
-            console.log('OLD MESSAGES', oldMessages);
-            console.log('MESSAGES AFTER SET', messages)
-        }
-    }
-    getOldMessages();
-
-    }
-
-    ws.onerror = (event) => {
-      console.log(`Error: ${event}`);
-    }
-
-    ws.onclose = (event) => {
-      console.log(`Connection closed: ${event}`);
-      webSocket.current = null;
-    //   setUsername('');
-    //   setMessages([]);
-    }
-
-    webSocket.current = ws;
-
-    return function cleanup() {
-      if (webSocket.current !== null) {
-        webSocket.current.close();
-      }
-    }
-  },[username]);
-
-  useEffect(() => {
-    console.log('useeffect triggered');
-    if (webSocket.current !== null) {
-        console.log('NOT NULL', webSocket.current);
-          webSocket.current.onmessage = (event) => {
-          const chatMessage = JSON.parse(event.data);
-          const message = chatMessage.data;
-
-          //date was JSON formatted, we need to convert it back to a Date object.
-          message.created = new Date(message.created);
-            // if ((message.recipient === username) || (message.username === username)) {
-                setMessages([...messages, message]);
-        //   }
-        console.log('Message structure', message)
-        }
-    }
+//           //date was JSON formatted, we need to convert it back to a Date object.
+//           message.created = new Date(message.created);
+//             // if ((message.recipient === username) || (message.username === username)) {
+//                 setMessages([...messages, message]);
+//         //   }
+//         console.log('Message structure', message)
+//         }
+//     }
 }, [messages, sessionUser])
 
 
@@ -154,10 +135,8 @@ function Messages() {
       data: newMessage,
     });
 
-    console.log(webSocket.current);
-
     console.log(`Sending message ${jsonNewMessage}...`);
-    webSocket.current.send(jsonNewMessage);
+    // socket.io.emit(jsonNewMessage);
 
 
     const saveMessage = async() => {
