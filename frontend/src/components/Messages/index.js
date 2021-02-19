@@ -9,7 +9,6 @@ import Conversation from "../Conversation";
 import { v4 as uuid } from 'uuid';
 import Cookies from 'js-cookie';
 import { io } from 'socket.io-client';
-const socketUrl = "http://localhost:5000";
 
 function Messages() {
 
@@ -25,7 +24,7 @@ function Messages() {
     const [recipient, setRecipient] = useState('');
 
     const initSocket = () => {
-        const socket = io(socketUrl);
+        const socket = io();
         socket.on('connect', () => {
             console.log('connected');
         })

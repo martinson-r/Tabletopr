@@ -5,18 +5,10 @@ const { createServer } = require('http');
 const app = require('../app');
 const db = require('../db/models');
 
-const server = require('http').createServer(app);
-const io = require('socket.io')(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"]
-  }
-});
+// const server = require('http').createServer(app);
+const io = require('../routes/sockets');
 
-io.on('connection', function (socket) {
-  console.log("Socket connected :"+socket.id);
-socket.emit('news', { hello: 'world' });
-});
+
 
 // Check the database connection before starting the app
 db.sequelize
@@ -25,7 +17,8 @@ db.sequelize
     console.log('Database connection success! Sequelize is ready to use...');
 
     // Start listening for connections
-    server.listen(port, () => console.log(`Listening on port ${port}...`));
+    const server = app.listen(port, () => console.log(`Listening on port ${port}...`));
+    io.attach(server);
   })
   .catch((err) => {
     console.log('Database connection failure.');
