@@ -22,16 +22,38 @@ function Messages() {
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState('');
     const [recipient, setRecipient] = useState('');
+    const socket = io('http://localhost:5000');
+
+    socket.on('broadcast-chat-message', function(broadcastedMessage) {
+      const message = broadcastedMessage.data;
+      message.created = new Date(message.created);
+      console.log('message structure', message);
+      setMessages([...messages, message]);
+  });
 
     const initSocket = () => {
-        const socket = io();
         socket.on('connect', () => {
-            console.log('connected');
+          console.log('socket connected');
+          const getOldMessages = async() => {
+                    const data = await fetch(`/api/messages/${sessionUser.id}`);
+                    if (data.ok) {
+                        const oldMessages = await data.json();
+                        setMessages([...oldMessages.rows]);
+                    }
+                }
+                getOldMessages();
+                console.log('Old Messages', oldMessages);
         })
     }
 
+    socket.on('broadcast-chat-message', function(data) {
+      console.log('data', data)
+    })
 
     useEffect(() => {
+      if (recipient) {
+        initSocket();
+      }
         console.log('Recipient....', recipient)
     },[recipient])
 
@@ -41,7 +63,6 @@ function Messages() {
     useEffect(() => {
 
         if (sessionUser) {
-        initSocket();
         setUsername(sessionUser.username);
         dispatch(getFellowPlayers());
         dispatch(loadUserMessages(sessionUser.id));
@@ -82,43 +103,18 @@ function Messages() {
     if(!username) {
       return;
     }
+  },[])
 
-    // socket.on('connect', function(){
-    //     const getOldMessages = async() => {
-    //         const data = await fetch(`/api/messages/${sessionUser.id}`);
-    //         if (data.ok) {
-    //             const oldMessages = await data.json();
-    //             setMessages([...oldMessages]);
-    //             console.log('OLD MESSAGES', oldMessages);
-    //             console.log('MESSAGES AFTER SET', messages)
-    //         }
-    //     }
-    //     getOldMessages();
-    // });
-
-    // },[username]);
-
-//   useEffect(() => {
-//     console.log('useeffect triggered');
-//     if (webSocket.current !== null) {
-//         console.log('NOT NULL', webSocket.current);
-//           webSocket.current.onmessage = (event) => {
-//           const chatMessage = JSON.parse(event.data);
-//           const message = chatMessage.data;
-
-//           //date was JSON formatted, we need to convert it back to a Date object.
-//           message.created = new Date(message.created);
-//             // if ((message.recipient === username) || (message.username === username)) {
-//                 setMessages([...messages, message]);
-//         //   }
-//         console.log('Message structure', message)
-//         }
-//     }
-}, [messages, sessionUser])
+  useEffect(() => {
+    console.log('useeffect triggered');
+    if (socket !== null ) {
+      console.log('NOT NULL', socket)
+  }
+}, [messages, sessionUser]);
 
 
 
-  const handleSendMessage = (message) => {
+const handleSendMessage = (message) => {
     const newMessage = {
       id: sessionUser.id,
       uuid: uuid(),
@@ -130,12 +126,13 @@ function Messages() {
     }
 
     const jsonNewMessage = JSON.stringify({
-      type: 'send-chat-message',
       data: newMessage,
     });
 
-    console.log(`Sending message ${jsonNewMessage}...`);
-    // socket.io.emit(jsonNewMessage);
+    socket.emit('send-chat-message', jsonNewMessage);
+  }
+
+
 
 
     const saveMessage = async() => {
@@ -149,28 +146,16 @@ function Messages() {
           if (response.ok) {
             const messagesFromServer = await response.json();
             console.log('FROM SERVER', messagesFromServer)
-            // dispatch(loadAllMessages(messagesFromServer));
           }
-        }
         saveMessage();
-
 };
 
 const handleLeave = () => {
   setUsername('');
 };
 
-    const handleSendOnClick = () => {
-        handleSendMessage(message);
-        setMessage(message);
-    };
-
     const handleOnChange = (e) => {
         setMessage(e.target.value);
-    }
-
-    const handleLeaveOnClick = () => {
-        handleLeave();
     }
 
     useEffect(() => {
@@ -180,7 +165,6 @@ const handleLeave = () => {
                 const data = await fetch('/api/messages');
                 const messages = await data.json();
             }
-
             getMessages();
         }
       }, [dispatch, sessionUser]);
