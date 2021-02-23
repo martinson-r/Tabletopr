@@ -205,7 +205,7 @@ router.get('/', asyncHandler(async (req, res) => {
                   }} ]
             })
 
-            console.log('UPDATED TABLE*****', updatedTable)
+
             return res.json(updatedTable);
         }
         return res.json('Must be logged in to apply to a table')

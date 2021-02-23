@@ -21,7 +21,8 @@ function Messages() {
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState('');
     const [recipient, setRecipient] = useState('');
-    const socket = io('http://localhost:5000');
+    // const socket = io('http://localhost:5000');
+    const socket = io();
 
     const saveMessage = async(message) => {
       const response = await fetch(`/api/messages/${sessionUser.id}/${recipient.id}`, {
@@ -33,26 +34,20 @@ function Messages() {
         });
         if (response.ok) {
           const messagesFromServer = await response.json();
-          console.log('FROM SERVER', messagesFromServer)
         }
 };
 
     socket.on('broadcast-chat-message', function(broadcastedMessage) {
-      console.log('broadcastedMessage***', broadcastedMessage)
       let messageJSON = JSON.parse(broadcastedMessage);
       let message = messageJSON.data;
       message.createdAt = new Date(message.createdAt);
-      console.log('message structure', message);
       setMessages([...messages, message]);
   });
 
 
     const initSocket = () => {
         socket.on('connect', () => {
-          console.log('socket connected');
           const jsonData = JSON.stringify({data: { User: { id: sessionUser.id }, Recipient: { id: recipient.id }}})
-          console.log('recipient', recipient.id)
-          console.log(jsonData);
           socket.emit('private-chat', jsonData )
 
           const getOldMessages = async() => {
@@ -63,7 +58,6 @@ function Messages() {
                     }
                 };
                 getOldMessages();
-                console.log('Old Messages', oldMessages);
 
               });
   }
@@ -71,9 +65,7 @@ function Messages() {
     useEffect(() => {
       if (recipient !== undefined) {
         initSocket();
-        console.log('connect');
       }
-        console.log('Recipient....', recipient)
     },[recipient.id])
 
 
@@ -94,7 +86,6 @@ function Messages() {
   useEffect(() => {
       if (playerLists !== undefined) {
           if (playerLists.length > 0) {
-              console.log(playerLists)
 
               const players = playerLists.map(list => list.Table.PlayerLists);
               let joinedPlayerList = [];
@@ -109,10 +100,6 @@ function Messages() {
 
               const deDupe = filteredList.filter((v,index,a)=>a.findIndex(t=>( t.playerId === v.playerId ))===index)
 
-
-              console.log('PLAYERS', deDupe)
-              console.log('HOSTS', hosts);
-
               setRecipientList([...deDupe]);
             }
           }
@@ -125,9 +112,7 @@ function Messages() {
   },[])
 
   useEffect(() => {
-    console.log('useeffect triggered');
     if (socket !== null ) {
-      console.log('NOT NULL', socket)
   }
 }, [messages, sessionUser]);
 

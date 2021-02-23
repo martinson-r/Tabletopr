@@ -24,14 +24,13 @@ useEffect(() => {
         }
         if (table.Applications) {
                 const matchingApp = table.Applications.filter(application => application.userId === sessionUser.id);
-                console.log('MATCHING APP', matchingApp);
+
                 if (matchingApp.length) {
                     if (matchingApp[0].denied) {
                         setApplicationStatus([true, "Your application has been denied."])
                     } else if (matchingApp[0].approved) {
                         setApplicationStatus([true, "Your application has been approved"])
                     } else {
-                        console.log('neither true nor false');
                         setApplicationStatus([true, "Your application is still being reviewed."])
                     }
                 }

@@ -13,12 +13,9 @@ function ApplicationDetail() {
     const { playerId } = useParams();
     const [applicationStatus, setApplicationStatus] = useState("");
 
-    console.log(playerId);
-
     const table = useSelector(state => state.tables.table);
     const applications = useSelector(state => state.tables.applications);
     const currentApplication = applications.filter(application => application.userId == parseInt(playerId))
-    // console.log(currentApplication[0].approved);
 
     useEffect(() => {
         dispatch(getSingleTable(tableId));

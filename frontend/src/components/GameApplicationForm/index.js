@@ -28,7 +28,6 @@ const GameApplicationForm = () => {
         tableId
       };
     dispatch(applyToTable(payload));
-    console.log('apply to table dispatched', payload);
     history.push(`/tables/${tableId}`)
   };
 

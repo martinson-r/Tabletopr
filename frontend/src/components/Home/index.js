@@ -11,7 +11,6 @@ function Home() {
 
     useEffect(() => {
         dispatch(getAllTables());
-        console.log("Got all tables");
       }, [dispatch]);
 
     return (
