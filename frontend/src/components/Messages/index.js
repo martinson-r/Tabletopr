@@ -58,7 +58,9 @@ function Messages() {
                 }
                 getOldMessages();
                 console.log('Old Messages', oldMessages);
-        })
+        });
+        const jsonData = JSON.stringify({data: { User: { id: sessionUser.id }, Recipient: { id: recipient.id }}})
+        socket.emit('private-chat', jsonData )
     }
 
     socket.on('broadcast-chat-message', function(data) {
