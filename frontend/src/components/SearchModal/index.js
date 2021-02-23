@@ -8,7 +8,7 @@ function SearchModal() {
 
   return (
     <>
-      <div className="login" onClick={() => setShowModal(true)}><i class="fas fa-search"></i></div>
+      <div className="login" onClick={() => setShowModal(true)}><i className="fas fa-search"></i></div>
       {showModal && (
         <Modal id="search-modal-position" onClose={() => setShowModal(false)}>
           <SimpleSearch />
