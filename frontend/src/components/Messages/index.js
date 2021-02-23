@@ -46,33 +46,35 @@ function Messages() {
       setMessages([...messages, message]);
   });
 
+
     const initSocket = () => {
         socket.on('connect', () => {
           console.log('socket connected');
+          const jsonData = JSON.stringify({data: { User: { id: sessionUser.id }, Recipient: { id: recipient.id }}})
+          console.log('recipient', recipient.id)
+          console.log(jsonData);
+          socket.emit('private-chat', jsonData )
+
           const getOldMessages = async() => {
                     const data = await fetch(`/api/messages/${sessionUser.id}`);
                     if (data.ok) {
                         const oldMessages = await data.json();
                         setMessages([...oldMessages.rows]);
                     }
-                }
+                };
                 getOldMessages();
                 console.log('Old Messages', oldMessages);
-        });
-        const jsonData = JSON.stringify({data: { User: { id: sessionUser.id }, Recipient: { id: recipient.id }}})
-        socket.emit('private-chat', jsonData )
-    }
 
-    socket.on('broadcast-chat-message', function(data) {
-      console.log('data', data)
-    })
+              });
+  }
 
     useEffect(() => {
-      if (recipient) {
+      if (recipient !== undefined) {
         initSocket();
+        console.log('connect');
       }
         console.log('Recipient....', recipient)
-    },[recipient])
+    },[recipient.id])
 
 
     const sessionUser = useSelector((state) => state.session.user);
