@@ -14,7 +14,6 @@ function Messages() {
 
     const dispatch = useDispatch();
 
-    const tables = useSelector(state => state.tables.tableList);
     const playerLists = useSelector(state => state.tables.players);
     const oldMessages = useSelector(state => state.messages.messages);
     const [recipientList, setRecipientList] = useState([]);
@@ -28,7 +27,7 @@ function Messages() {
       console.log('broadcastedMessage***', broadcastedMessage)
       let messageJSON = JSON.parse(broadcastedMessage);
       let message = messageJSON.data;
-      // message.created = new Date(broadcastedMessage.data.createdAt);
+      message.createdAt = new Date(message.createdAt);
       console.log('message structure', message);
       setMessages([...messages, message]);
   });
@@ -131,8 +130,7 @@ const handleSendMessage = (message) => {
       data: newMessage,
     });
 
-    console.log('newMessage', jsonNewMessage)
-
+    dispatch(saveUserMessages(newMessage));
     socket.emit('send-chat-message', jsonNewMessage);
   }
 
