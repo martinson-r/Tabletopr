@@ -8,6 +8,7 @@ io.on('connection', function (socket) {
   socket.emit('news', { hello: 'world' });
 
   socket.on('send-chat-message', function(data) {
+    console.log('data', data);
     io.emit('broadcast-chat-message', data);
   })
   socket.on('disconnect', () => {

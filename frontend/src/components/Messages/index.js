@@ -25,8 +25,10 @@ function Messages() {
     const socket = io('http://localhost:5000');
 
     socket.on('broadcast-chat-message', function(broadcastedMessage) {
-      const message = broadcastedMessage.data;
-      message.created = new Date(message.created);
+      console.log('broadcastedMessage***', broadcastedMessage)
+      let messageJSON = JSON.parse(broadcastedMessage);
+      let message = messageJSON.data;
+      // message.created = new Date(broadcastedMessage.data.createdAt);
       console.log('message structure', message);
       setMessages([...messages, message]);
   });
@@ -128,6 +130,8 @@ const handleSendMessage = (message) => {
     const jsonNewMessage = JSON.stringify({
       data: newMessage,
     });
+
+    console.log('newMessage', jsonNewMessage)
 
     socket.emit('send-chat-message', jsonNewMessage);
   }
