@@ -23,6 +23,20 @@ function Messages() {
     const [recipient, setRecipient] = useState('');
     const socket = io('http://localhost:5000');
 
+    const saveMessage = async(message) => {
+      const response = await fetch(`/api/messages/${sessionUser.id}/${recipient.id}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "XSRF-Token": `${Cookies.get('XSRF-TOKEN')}` },
+          body: JSON.stringify({
+            message
+          })
+        });
+        if (response.ok) {
+          const messagesFromServer = await response.json();
+          console.log('FROM SERVER', messagesFromServer)
+        }
+};
+
     socket.on('broadcast-chat-message', function(broadcastedMessage) {
       console.log('broadcastedMessage***', broadcastedMessage)
       let messageJSON = JSON.parse(broadcastedMessage);
@@ -130,27 +144,9 @@ const handleSendMessage = (message) => {
       data: newMessage,
     });
 
-    dispatch(saveUserMessages(newMessage));
+    saveMessage(newMessage.content);
     socket.emit('send-chat-message', jsonNewMessage);
   }
-
-
-
-
-    const saveMessage = async() => {
-        const response = await fetch(`/api/messages/${sessionUser.id}/${recipient.id}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "XSRF-Token": `${Cookies.get('XSRF-TOKEN')}` },
-            body: JSON.stringify({
-              message
-            })
-          });
-          if (response.ok) {
-            const messagesFromServer = await response.json();
-            console.log('FROM SERVER', messagesFromServer)
-          }
-        saveMessage();
-};
 
 const handleLeave = () => {
   setUsername('');
