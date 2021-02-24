@@ -8,11 +8,13 @@ import { loadUserMessages } from "../../store/messages";
 import Conversation from "../Conversation";
 import { v4 as uuid } from 'uuid';
 import Cookies from 'js-cookie';
-import { io } from 'socket.io-client';
+import { io } from "socket.io-client";
+
 
 function Messages() {
 
     const dispatch = useDispatch();
+    const socket = io('http://localhost:5000');
 
     const playerLists = useSelector(state => state.tables.players);
     const oldMessages = useSelector(state => state.messages.messages);
@@ -21,8 +23,6 @@ function Messages() {
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState('');
     const [recipient, setRecipient] = useState('');
-    // const socket = io('http://localhost:5000');
-    const socket = io();
 
     const saveMessage = async(message) => {
       const response = await fetch(`/api/messages/${sessionUser.id}/${recipient.id}`, {
@@ -32,39 +32,37 @@ function Messages() {
             message
           })
         });
-        if (response.ok) {
-          const messagesFromServer = await response.json();
-        }
 };
 
-    socket.on('broadcast-chat-message', function(broadcastedMessage) {
-      let messageJSON = JSON.parse(broadcastedMessage);
-      let message = messageJSON.data;
-      message.createdAt = new Date(message.createdAt);
-      setMessages([...messages, message]);
-  });
+socket.on('broadcast-chat-message', function(broadcastedMessage) {
+  let messageJSON = JSON.parse(broadcastedMessage);
+  let message = messageJSON.data;
+  message.createdAt = new Date(message.createdAt);
+  setMessages([...messages, message]);
+});
 
+const initSocket = () => {
+    socket.on('connect', () => {
+      const jsonData = JSON.stringify({data: { User: { id: sessionUser.id }, Recipient: { id: recipient.id }}})
+      socket.emit('private-chat', jsonData )
+    });
+}
 
-    const initSocket = () => {
-        socket.on('connect', () => {
-          const jsonData = JSON.stringify({data: { User: { id: sessionUser.id }, Recipient: { id: recipient.id }}})
-          socket.emit('private-chat', jsonData )
-
-          const getOldMessages = async() => {
-                    const data = await fetch(`/api/messages/${sessionUser.id}`);
-                    if (data.ok) {
-                        const oldMessages = await data.json();
-                        setMessages([...oldMessages.rows]);
-                    }
-                };
-                getOldMessages();
-
-              });
-  }
+useEffect(() => {
+  initSocket();
+}, []);
 
     useEffect(() => {
       if (recipient !== undefined) {
-        initSocket();
+        const getOldMessages = async() => {
+          const data = await fetch(`/api/messages/${sessionUser.id}`);
+          if (data.ok) {
+              const oldMessages = await data.json();
+              setMessages([...oldMessages]);
+          }
+      };
+      getOldMessages();
+
       }
     },[recipient.id])
 
@@ -80,6 +78,7 @@ function Messages() {
         }
         if (sessionUser === undefined) {
             setMessages([]);
+            socket.disconnect();
         }
   }, [dispatch, sessionUser])
 
@@ -166,10 +165,8 @@ const handleLeave = () => {
         <div className="container">
         <div>
             <h2>Contacts</h2>
-            {/* {hosts.map(host => <div onClick={() =>setRecipient(host)}>{host.username}</div>)} */}
-            {recipientList.map(recipient => <div onClick={() =>setRecipient(recipient.User)}>{recipient.User.username}</div>)}
+            {recipientList.map(recipient => <div key={recipient.User.username} onClick={() =>setRecipient(recipient.User)}>{recipient.User.username}</div>)}
         </div>
-        {/* {recipientList.map(recipient => {console.log(recipient)})} */}
         <div>
             {recipient && (<div><Conversation username={username}
             recipient={recipient}

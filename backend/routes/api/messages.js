@@ -20,13 +20,12 @@ const router = express.Router();
 
 router.get('/:userId', asyncHandler(async (req, res) => {
     const userId = req.params.userId;
-    const fetchAllUserMessages = await Message.findAndCountAll({
+    const fetchAllUserMessages = await Message.findAll({
         where: { [Op.or]: {
             userId,
             recipientId: userId
         } },
-        include: [User, {model: User, as: "Recipient" }],
-        limit: 10,
+        include: [User, {model: User, as: "Recipient" }]
     })
     return res.json(fetchAllUserMessages);
  }));
