@@ -26,11 +26,11 @@ function Navigation({ isLoaded }){
     );
   } else {
     sessionLinks = (
-      <navigation>
+      <div className="navigation">
         <h1 className="header"><i class="fas fa-dice-d20"></i><NavLink exact to="/">Tabletopr</NavLink></h1>
         <NavLink to="/">Find a Game</NavLink>
         <SearchModal />
-      </navigation>
+      </div>
     );
   }
 

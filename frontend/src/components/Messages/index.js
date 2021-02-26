@@ -35,6 +35,7 @@ function Messages() {
 };
 
 socket.on('broadcast-chat-message', function(broadcastedMessage) {
+  console.log('received broadcast');
   let messageJSON = JSON.parse(broadcastedMessage);
   let message = messageJSON.data;
   message.createdAt = new Date(message.createdAt);
@@ -53,7 +54,7 @@ useEffect(() => {
 }, []);
 
     useEffect(() => {
-      if (recipient !== undefined) {
+      if (recipient !== undefined && sessionUser !== undefined) {
         const getOldMessages = async() => {
           const data = await fetch(`/api/messages/${sessionUser.id}`);
           if (data.ok) {
@@ -155,6 +156,14 @@ const handleLeave = () => {
         }
       }, [dispatch, sessionUser]);
 
+      if (sessionUser === undefined) {
+        return(
+          <div>
+            You must log in to view messages.
+          </div>
+        )
+      }
+
       if ( recipientList.length === 0 ) {
           return (
               <div className="container"><p>You can't message anyone until you join a game. Join some games, and then you will be able to message your fellow players!</p></div>
@@ -165,8 +174,10 @@ const handleLeave = () => {
         <div className="container">
         <div>
             <h2>Contacts</h2>
+            {/* {hosts.map(host => <div onClick={() =>setRecipient(host)}>{host.username}</div>)} */}
             {recipientList.map(recipient => <div key={recipient.User.username} onClick={() =>setRecipient(recipient.User)}>{recipient.User.username}</div>)}
         </div>
+        {/* {recipientList.map(recipient => {console.log(recipient)})} */}
         <div>
             {recipient && (<div><Conversation username={username}
             recipient={recipient}
