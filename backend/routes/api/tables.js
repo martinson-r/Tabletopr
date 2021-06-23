@@ -100,6 +100,11 @@ router.get('/', asyncHandler(async (req, res) => {
                 approved,
                 denied
             });
+
+           await PlayerList.create({
+            tableId,
+            playerId
+           });
         }
         return res.json(fetchSingleApplication);
     }

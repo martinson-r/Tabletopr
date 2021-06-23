@@ -99,7 +99,7 @@ useEffect(() => {
               filteredList.concat(hosts);
 
               const deDupe = filteredList.filter((v,index,a)=>a.findIndex(t=>( t.playerId === v.playerId ))===index)
-
+              console.log('DeDupe', deDupe);
               setRecipientList([...deDupe]);
             }
           }
