@@ -14,7 +14,7 @@ import { io } from "socket.io-client";
 function Messages() {
 
     const dispatch = useDispatch();
-    const socket = io('http://localhost:5000');
+
 
     const playerLists = useSelector(state => state.tables.players);
     const oldMessages = useSelector(state => state.messages.messages);
@@ -23,6 +23,7 @@ function Messages() {
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState('');
     const [recipient, setRecipient] = useState('');
+    const [startSocket, setStartSocket] = useState(null);
 
     const saveMessage = async(message) => {
       const response = await fetch(`/api/messages/${sessionUser.id}/${recipient.id}`, {
@@ -34,15 +35,11 @@ function Messages() {
         });
 };
 
-socket.on('broadcast-chat-message', function(broadcastedMessage) {
-  console.log('received broadcast');
-  let messageJSON = JSON.parse(broadcastedMessage);
-  let message = messageJSON.data;
-  message.createdAt = new Date(message.createdAt);
-  setMessages([...messages, message]);
-});
+
 
 const initSocket = () => {
+    const socket = io('http://localhost:5000');
+    setStartSocket(socket);
     socket.on('connect', () => {
       const jsonData = JSON.stringify({data: { User: { id: sessionUser.id }, Recipient: { id: recipient.id }}})
       socket.emit('private-chat', jsonData )
@@ -50,8 +47,22 @@ const initSocket = () => {
 }
 
 useEffect(() => {
+  console.log('useEffect fired', recipient.id)
   initSocket();
-}, []);
+  console.log('socket', startSocket)
+}, [recipient.id]);
+
+useEffect(() => {
+  if (startSocket !== null) {
+    startSocket.on('broadcast-chat-message', function(broadcastedMessage) {
+      console.log('received broadcast');
+      let messageJSON = JSON.parse(broadcastedMessage);
+      let message = messageJSON.data;
+      message.createdAt = new Date(message.createdAt);
+      setMessages([...messages, message]);
+    });
+  }
+}, [startSocket]);
 
     useEffect(() => {
       if (recipient !== undefined && sessionUser !== undefined) {
@@ -79,7 +90,7 @@ useEffect(() => {
         }
         if (sessionUser === undefined) {
             setMessages([]);
-            socket.disconnect();
+            startSocket.disconnect();
         }
   }, [dispatch, sessionUser])
 
@@ -112,7 +123,7 @@ useEffect(() => {
   },[])
 
   useEffect(() => {
-    if (socket !== null ) {
+    if (startSocket !== null ) {
   }
 }, [messages, sessionUser]);
 
@@ -134,7 +145,7 @@ const handleSendMessage = (message) => {
     });
 
     saveMessage(newMessage.content);
-    socket.emit('send-chat-message', jsonNewMessage);
+    startSocket.emit('send-chat-message', jsonNewMessage);
   }
 
 const handleLeave = () => {
