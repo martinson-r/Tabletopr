@@ -49,20 +49,20 @@ const initSocket = () => {
 useEffect(() => {
   console.log('useEffect fired', recipient.id)
   initSocket();
-  console.log('socket', startSocket)
 }, [recipient.id]);
 
-useEffect(() => {
+// useEffect(() => {
   if (startSocket !== null) {
     startSocket.on('broadcast-chat-message', function(broadcastedMessage) {
-      console.log('received broadcast');
       let messageJSON = JSON.parse(broadcastedMessage);
       let message = messageJSON.data;
       message.createdAt = new Date(message.createdAt);
+      console.log('message', message)
+      console.log('messages', messages)
       setMessages([...messages, message]);
     });
   }
-}, [startSocket]);
+// }, [startSocket]);
 
     useEffect(() => {
       if (recipient !== undefined && sessionUser !== undefined) {
