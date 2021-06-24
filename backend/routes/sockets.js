@@ -1,7 +1,7 @@
 const { environment, port } = require('./config');
 const isProduction = environment === 'production';
 
-const io;
+const io();
 
 if (!isProduction) {
   io = require('socket.io')({cors: {
