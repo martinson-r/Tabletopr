@@ -1,7 +1,8 @@
 const { environment, port } = require('../config');
-const isProduction = environment === 'production';
+const isProduction = process.env.NODE_ENV === "production";
 
-let io;
+let io = require('socket.io')()
+console.log('production?', isProduction)
 
 if (!isProduction) {
   io = require('socket.io')({cors: {
@@ -18,12 +19,11 @@ io.on('connection', function (socket) {
   socket.on('private-chat', function(data){
 
     let jsonMessageData = JSON.parse(data);
-    console.log('chat', jsonMessageData);
     connectedUsers[jsonMessageData.data.User.id] = socket.id;
+
   });
 
   socket.on('send-chat-message', function (data) {
-    console.log('sent message')
     let jsonMessageData = JSON.parse(data);
     const jsonRecipient = jsonMessageData.data.Recipient.id;
     const jsonUser = jsonMessageData.data.User.id;
@@ -36,7 +36,6 @@ io.on('connection', function (socket) {
   });
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
     socket.removeAllListeners();
   });
 });
