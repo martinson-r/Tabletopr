@@ -1,7 +1,8 @@
 const { environment, port } = require('../config');
 const isProduction = process.env.NODE_ENV === "production";
 
-let io;
+let io = require('socket.io')()
+console.log('production?', isProduction)
 
 if (!isProduction) {
   io = require('socket.io')({cors: {
@@ -12,6 +13,8 @@ if (!isProduction) {
 
 let connectedUsers = {};
 
+console.log('connectedUsers', connectedUsers);
+
 io.on('connection', function (socket) {
   console.log("Socket connected >>>>> :"+socket.id);
 
@@ -19,6 +22,8 @@ io.on('connection', function (socket) {
 
     let jsonMessageData = JSON.parse(data);
     connectedUsers[jsonMessageData.data.User.id] = socket.id;
+    console.log('connectedUsers2', connectedUsers);
+
   });
 
   socket.on('send-chat-message', function (data) {
