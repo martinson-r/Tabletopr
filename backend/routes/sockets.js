@@ -1,9 +1,16 @@
-const io = require('socket.io')({cors: {
-  origin: "http://localhost:3000",
-  methods: ["GET", "POST"]
-}});
+const { environment, port } = require('./config');
+const isProduction = environment === 'production';
 
-// const io = require('socket.io')();
+const io;
+
+if (!isProduction) {
+  io = require('socket.io')({cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }});
+} else {
+  io = require('socket.io')(port)
+}
 
 let connectedUsers = {};
 
