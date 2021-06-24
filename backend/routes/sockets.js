@@ -18,12 +18,10 @@ io.on('connection', function (socket) {
   socket.on('private-chat', function(data){
 
     let jsonMessageData = JSON.parse(data);
-    console.log('chat', jsonMessageData);
     connectedUsers[jsonMessageData.data.User.id] = socket.id;
   });
 
   socket.on('send-chat-message', function (data) {
-
     let jsonMessageData = JSON.parse(data);
     const jsonRecipient = jsonMessageData.data.Recipient.id;
     const jsonUser = jsonMessageData.data.User.id;
