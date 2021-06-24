@@ -18,7 +18,6 @@ const SimpleSearch = () => {
         query
       };
     dispatch(searchTables(payload));
-    console.log('search tables dispatched', payload);
     history.push('/results')
   };
 

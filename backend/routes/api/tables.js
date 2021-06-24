@@ -100,6 +100,11 @@ router.get('/', asyncHandler(async (req, res) => {
                 approved,
                 denied
             });
+
+           await PlayerList.create({
+            tableId,
+            playerId
+           });
         }
         return res.json(fetchSingleApplication);
     }
@@ -173,7 +178,15 @@ router.get('/', asyncHandler(async (req, res) => {
             const returnTable = await Table.findOne({
                 where: { tableName, description, hostId: userId },
                 include: [GameSystem, GameType, User, Language, { model: TableReview, include: User }]
-            })
+            });
+
+            console.log('Table id', returnTable.id);
+
+            await PlayerList.create({
+                tableId: returnTable.id,
+                playerId: userId
+            });
+
             return res.json(returnTable);
         }
         return res.json('Must be logged in to create table')
@@ -205,7 +218,7 @@ router.get('/', asyncHandler(async (req, res) => {
                   }} ]
             })
 
-            console.log('UPDATED TABLE*****', updatedTable)
+
             return res.json(updatedTable);
         }
         return res.json('Must be logged in to apply to a table')

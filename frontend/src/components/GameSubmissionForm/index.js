@@ -36,7 +36,6 @@ const GameSubmissionForm = () => {
       };
 
     dispatch(submitTable(payload));
-    console.log('submit table dispatched. Payload: ', payload);
     history.push('/thanks');
   };
 

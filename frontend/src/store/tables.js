@@ -51,12 +51,10 @@ const loadAllTables = (tableList) => ({
   };
 
   export const getPlayerTables = (playerId) => async (dispatch) => {
-    console.log('player tables got');
     const response = await fetch(`/api/tables/players/${playerId}`);
 
     if (response.ok) {
       const tables = await response.json();
-      console.log('THUNK TABLES', tables);
       dispatch(loadAllTables(tables));
     }
   };
@@ -132,7 +130,6 @@ const loadAllTables = (tableList) => ({
 
   export const approveApplication = (payload) => async (dispatch) => {
     const { approved, tableId, playerId } = payload;
-    console.log('payload', payload)
     const response = await fetch(`/api/tables/${tableId}/${playerId}/application`, {
       method: "POST",
       headers: { "Content-Type": "application/json", "XSRF-Token": `${Cookies.get('XSRF-TOKEN')}` },
@@ -145,14 +142,12 @@ const loadAllTables = (tableList) => ({
     });
     if (response.ok) {
       const applications = await response.json();
-      console.log('APPLICATIONS RESPONSE', applications);
       dispatch(loadSingleApplication(applications));
     }
   };
 
   export const denyApplication = (payload) => async (dispatch) => {
     const { denied, tableId, playerId } = payload;
-    console.log('payload', payload)
     const response = await fetch(`/api/tables/${tableId}/${playerId}/application`, {
       method: "POST",
       headers: { "Content-Type": "application/json", "XSRF-Token": `${Cookies.get('XSRF-TOKEN')}` },

@@ -19,7 +19,6 @@ const router = express.Router();
  }));
 
 router.get('/:userId', asyncHandler(async (req, res) => {
-    console.log('GET MESSAGES ROUTE HIT');
     const userId = req.params.userId;
     const fetchAllUserMessages = await Message.findAll({
         where: { [Op.or]: {

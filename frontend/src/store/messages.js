@@ -23,7 +23,17 @@ const loadMessages = (oldMessages) => ({
   };
 
   export const saveUserMessages = (content) => async (dispatch) => {
-
+   const response = await fetch(``, {
+     method: 'POST',
+     headers: { "Content-Type": "application/json", "XSRF-Token": `${Cookies.get('XSRF-TOKEN')}` },
+     body: JSON.stringify({
+      content
+    })
+   });
+   if (response.ok) {
+     const message = await response.json();
+     dispatch(saveMessages(message))
+   }
   }
 
   const initialState = {

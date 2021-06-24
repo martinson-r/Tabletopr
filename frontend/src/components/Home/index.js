@@ -11,14 +11,13 @@ function Home() {
 
     useEffect(() => {
         dispatch(getAllTables());
-        console.log("Got all tables");
       }, [dispatch]);
 
     return (
         <div className="container">
         <p>Newest Tables:</p>
             <div className="card-container">
-            {tables.map(table =>(<Link to={`/tables/${table.id}`}>
+            {tables.map(table =>(<Link key={table.id} to={`/tables/${table.id}`}>
                 {<div className="table-card"><p>{table.GameSystem.gameSystem}:
                 <br />{table.tableName}</p><p>Hosted by:<br />{table.User.username}</p>
                 </div>}</Link>))}

@@ -1,46 +1,13 @@
 #!/usr/bin/env node
 
 const { port } = require('../config');
-const { createServer } = require('http');
 const app = require('../app');
 const db = require('../db/models');
-const WebSocket = require('ws');
 
-const server = createServer(app);
+// const server = require('http').createServer(app);
+const io = require('../routes/sockets');
 
-const wss = new WebSocket.Server({ server });
 
-wss.on('connection', (ws, request, client) => {
-  ws.on('message', (jsonData) => {
-    console.log(`Processing incoming message from client ${client}`);
-    const message = JSON.parse(jsonData);
-    const chatMessage = message.data;
-
-    console.log('chatMessage', chatMessage);
-
-    const addChatMessage = {
-      type: 'add-chat-message',
-      data: chatMessage,
-    };
-
-    const jsonAddChatMessage = JSON.stringify(addChatMessage);
-    console.log(`Sending message ${jsonAddChatMessage}`);
-
-    wss.clients.forEach((client) => {
-      //Ready states include:
-      //CONNECTING, OPEN, CLOSING, CLOSED
-      console.log('client ready state', client.readyState);
-      console.log('CLIENT RECIPIENT', client.username)
-      if (client.readyState === WebSocket.OPEN) {
-        console.log('message sent:', jsonAddChatMessage);
-        client.send(jsonAddChatMessage);
-      }
-    });
-  });
-  ws.on('close', (event) => {
-    console.log(event);
-  })
-});
 
 // Check the database connection before starting the app
 db.sequelize
@@ -49,7 +16,8 @@ db.sequelize
     console.log('Database connection success! Sequelize is ready to use...');
 
     // Start listening for connections
-    server.listen(port, () => console.log(`Listening on port ${port}...`));
+    const server = app.listen(port, () => console.log(`Listening on port ${port}...`));
+    io.attach(server);
   })
   .catch((err) => {
     console.log('Database connection failure.');

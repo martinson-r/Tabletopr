@@ -12,16 +12,11 @@ function Conversation({ messages, recipient, username, handleLeave, handleSendMe
     return c-d
     });
 
-    console.log('SORTED', sortedMessages);
-
     const dispatch = useDispatch();
     const tables = useSelector(state => state.tables.tableList);
     const [message, setMessage] = useState('');
 
-    console.log('conversation messages', messages)
-
     const handleSendOnClick = () => {
-        console.log('conversation message',)
         handleSendMessage(message);
         setMessage('');
     };
