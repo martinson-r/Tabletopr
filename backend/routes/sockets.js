@@ -13,8 +13,6 @@ if (!isProduction) {
 
 let connectedUsers = {};
 
-console.log('connectedUsers', connectedUsers);
-
 io.on('connection', function (socket) {
   console.log("Socket connected >>>>> :"+socket.id);
 
@@ -22,7 +20,6 @@ io.on('connection', function (socket) {
 
     let jsonMessageData = JSON.parse(data);
     connectedUsers[jsonMessageData.data.User.id] = socket.id;
-    console.log('connectedUsers2', connectedUsers);
 
   });
 
@@ -32,7 +29,6 @@ io.on('connection', function (socket) {
     const jsonUser = jsonMessageData.data.User.id;
     let recipientId = connectedUsers[jsonRecipient];
     let senderId = connectedUsers[jsonUser];
-    console.log('sent message')
     io.to(senderId).emit('broadcast-chat-message', data);
     if (recipientId !== undefined) {
       io.to(recipientId).emit('broadcast-chat-message', data);
@@ -40,7 +36,6 @@ io.on('connection', function (socket) {
   });
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
     socket.removeAllListeners();
   });
 });
