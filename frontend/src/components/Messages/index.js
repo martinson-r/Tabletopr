@@ -38,7 +38,12 @@ function Messages() {
 
 
 const initSocket = () => {
-    const socket = io('http://localhost:5000');
+  const socket;
+  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+    socket = io('http://localhost:5000');
+  } else {
+    socket = io('wss://tabletopr-groupfinder.herokuapp.com');
+  }
     setStartSocket(socket);
     socket.on('connect', () => {
       const jsonData = JSON.stringify({data: { User: { id: sessionUser.id }, Recipient: { id: recipient.id }}})
