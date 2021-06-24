@@ -38,14 +38,15 @@ function Messages() {
 
 
 const initSocket = () => {
-  const socket;
-  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+  let socket;
+  if (process.env.NODE_ENV !== "production") {
     socket = io('http://localhost:5000');
   } else {
     socket = io('wss://tabletopr-groupfinder.herokuapp.com');
   }
     setStartSocket(socket);
     socket.on('connect', () => {
+      console.log('front end connected')
       const jsonData = JSON.stringify({data: { User: { id: sessionUser.id }, Recipient: { id: recipient.id }}})
       socket.emit('private-chat', jsonData )
     });
@@ -59,6 +60,7 @@ useEffect(() => {
 // useEffect(() => {
   if (startSocket !== null) {
     startSocket.on('broadcast-chat-message', function(broadcastedMessage) {
+      console.log('sent message')
       let messageJSON = JSON.parse(broadcastedMessage);
       let message = messageJSON.data;
       message.createdAt = new Date(message.createdAt);

@@ -1,28 +1,29 @@
-const { environment, port } = require('./config');
+const { environment, port } = require('../config');
 const isProduction = environment === 'production';
 
-const io();
+let io;
 
 if (!isProduction) {
   io = require('socket.io')({cors: {
     origin: "http://localhost:3000",
     methods: ["GET", "POST"]
   }});
-} else {
-  io = require('socket.io')(port)
 }
 
 let connectedUsers = {};
 
 io.on('connection', function (socket) {
-  console.log("Socket connected :"+socket.id);
+  console.log("Socket connected >>>>> :"+socket.id);
 
   socket.on('private-chat', function(data){
+
     let jsonMessageData = JSON.parse(data);
+    console.log('chat', jsonMessageData);
     connectedUsers[jsonMessageData.data.User.id] = socket.id;
   });
 
   socket.on('send-chat-message', function (data) {
+    console.log('sent message')
     let jsonMessageData = JSON.parse(data);
     const jsonRecipient = jsonMessageData.data.Recipient.id;
     const jsonUser = jsonMessageData.data.User.id;
